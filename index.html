@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HealThem</title>
+		<link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
+		<link href="styling.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div id="Game">
+			<div id="StartScreen">
+				<img src="images/SGCC-Start-Screen.gif" style="position: static;" width="800" height="600" />
+				<div style="background-color: rgba(0, 0, 0, 0.7); border-radius: 10px; top: 175px; left: 225px; width: 350px; height: 250px;">
+					<div style="font-size: 60px; color: white; z-index: 2; top: 30px; left: 30px;">HealThem</div>
+					<div style="z-index: 2; top: 140px; left: 50px;">
+						<button class="button" onclick="StartGame();">Start Game</button>
+					</div>
+				</div>
+			</div>
+
+			<div id="EnterName" style="display: none;">
+				<div style="font-size: 36px; color: white; z-index: 2; top: 250px; left: 250px;">Enter your name:</div>
+				<form onsubmit="EnterName(event);" style="z-index: 2; top: 320px; left: 250px;">
+					<input class="text-input" id="EnterName-Name" style="top: 0px; left: 10px;" />
+					<button type="submit" class="button" style="top: 70px; left: 20px;">GO!</button>
+				</form>
+			</div>
+
+			<div id="Premise" style="display: none;">
+				<div id="Premise-1">
+					<img src="images/pangda.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						The year is 2100, AD. Science, Technology and Engineering have brought unto humans greater prosperity than ever before. Hover cars fill the roads.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('1', '2');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-2" style="display: none;">
+					<img src="images/pangda.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						But the cars sure don't seem to be hovering far off the ground. Why is that so?
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('2', '3');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-3" style="display: none;">
+					<img src="images/pangda.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						Because of the people inside them. Humans has been spoiled by technology, and are now fat and lazy. The rise of Consumerism hasn't helped too.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('3', '4');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-4" style="display: none;">
+					<img src="https://img.4plebs.org/boards/pol/image/1487/22/1487224127360.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						But you, yes you, <span style="display: inline-block; width: auto; position: static;" class="PlayerName"></span>, have autism. Goodbye.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('2', '3');">Next ></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="startscreen.js"></script>
+	</body>
+</html>

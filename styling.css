@@ -1,0 +1,58 @@
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: black;
+}
+
+* {
+	font-family: "Fredoka One";
+	cursor: default;
+	outline: 0;
+	box-sizing: border-box;
+}
+
+#Game {
+	color: #fff;
+	position: relative;
+}
+
+#Game > * {
+	width: 800px; height: 600px;
+}
+
+#Game > * > * {
+	position: absolute;
+}
+
+#Game > * > * > * {
+	position: absolute;
+}
+
+#Game > * > * > * > * {
+	position: absolute;
+}
+
+.text-input {
+	background-color: white; color: black;
+	width: 250px;
+	border-radius: 5px;
+	padding: 10px;
+	font-size: 20px;
+	border: 0;
+}
+
+.button {
+	background-color: white; color: black;
+	width: 250px;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 10px;
+	font-size: 20px;
+	border: 0;
+}
+
+.button:hover {
+	background-color: grey;; color: black;
+	transition: 0.2s;
+}
