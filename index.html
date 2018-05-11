@@ -21,7 +21,7 @@
 			<div id="EnterName" style="display: none;">
 				<div style="font-size: 36px; color: white; z-index: 2; top: 250px; left: 250px;">Enter your name:</div>
 				<form onsubmit="EnterName(event);" style="z-index: 2; top: 320px; left: 250px;">
-					<input class="text-input" id="EnterName-Name" style="top: 0px; left: 10px;" />
+					<input class="text-input" id="EnterName-Name" style="top: 0px; left: 20px;" />
 					<button type="submit" class="button" style="top: 70px; left: 20px;">GO!</button>
 				</form>
 			</div>
@@ -52,10 +52,18 @@
 				</div>
 
 				<div id="Premise-4" style="display: none;">
+					<img src="" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						But you, yes you, <span style="display: inline-block; position: static;" class="PlayerName"></span>, have a special ability as people with autism are special. You want change. The spirit of the HealthKnight is burning in you.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('4', '5');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-5" style="display: none;">
 					<img src="https://img.4plebs.org/boards/pol/image/1487/22/1487224127360.png" width="800" height="450" />
 					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
-						But you, yes you, <span style="display: inline-block; width: auto; position: static;" class="PlayerName"></span>, have autism. Goodbye.
-						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('2', '3');">Next ></button>
+						You need to <b style="display: inline-block; position: static;">HealThem</b>.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Tutorial();">Play Game ></button>
 					</div>
 				</div>
 			</div>
