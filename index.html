@@ -2,13 +2,16 @@
 <html>
 	<head>
 		<title>HealThem</title>
+
 		<link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
 		<link href="styling.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/solid.css" integrity="sha384-Rw5qeepMFvJVEZdSo1nDQD5B6wX0m7c5Z/pLNvjkB14W6Yki1hKbSEQaX9ffUbWe" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/fontawesome.css" integrity="sha384-GVa9GOgVQgOk+TNYXu7S/InPTfSDTtBalSgkgqQ7sCik56N9ztlkoTr2f/T44oKV" crossorigin="anonymous">
 	</head>
 
 	<body>
 		<div id="Game">
-			<div id="StartScreen">
+			<div id="StartScreen" style="display: none;">
 				<img src="images/SGCC-Start-Screen.gif" style="position: static;" width="800" height="600" />
 				<div style="background-color: rgba(0, 0, 0, 0.7); border-radius: 10px; top: 175px; left: 225px; width: 350px; height: 250px;">
 					<div style="font-size: 60px; color: white; z-index: 2; top: 30px; left: 30px;">HealThem</div>
@@ -44,7 +47,7 @@
 				</div>
 
 				<div id="Premise-3" style="display: none;">
-					<img src="images/pangda.png" width="800" height="450" />
+					<img src="images/Fat guy exiting car.png" width="800" height="450" />
 					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
 						Because of the people inside them. Humans has been spoiled by technology, and are now fat and lazy. The rise of Consumerism hasn't helped too.
 						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('3', '4');">Next ></button>
@@ -60,11 +63,22 @@
 				</div>
 
 				<div id="Premise-5" style="display: none;">
-					<img src="https://img.4plebs.org/boards/pol/image/1487/22/1487224127360.png" width="800" height="450" />
+					<img src="" width="800" height="450" />
 					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
 						You need to <b style="display: inline-block; position: static;">HealThem</b>.
 						<button style="bottom: 10px; right: 10px;" class="button" onclick="Tutorial();">Play Game ></button>
 					</div>
+				</div>
+			</div>
+
+			<div id="Tutorial">
+				<img src="images/SGCC-Start-Screen.gif" style="position: static;" width="800" height="600" />
+				<div id="Snackbar" style="background-color: white; width: 200px; color: black; top: 20px; right: 20px; z-index: 2;">
+					<div style="padding: 10px; position: static;">
+						<i class="fa fa-info-circle" style="position: static; margin-right: 2px;"></i>
+						<span id="Snackbar-Text" style="position: static;">Tutorial Cardghergherwherhrh erghwer</span>
+					</div>
+					<button id="Snackbar-Button" style="cursor: pointer; background-color: #cdcdcd; position: static; border: 0; display: block; width: 100%; padding: 10px;">Next</button>
 				</div>
 			</div>
 		</div>

@@ -19,3 +19,8 @@ function Premise(a, b) {
 	document.getElementById("Premise-" + a).style.display = "none";
 	document.getElementById("Premise-" + b).style.display = "block";
 }
+
+function Tutorial() {
+	document.getElementById("Premise").style.display = "none";
+	document.getElementById("Tutorial").style.display = "block";
+}
