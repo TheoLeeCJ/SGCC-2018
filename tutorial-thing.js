@@ -40,51 +40,49 @@ qj.run("House", function() {
 	return background;
 }, function() {
 	// Collisions with backgrounds + movement
-	if ((qj.keydown[87]) || (qj.keydown[83]) || (qj.keydown[68]) || (qj.keydown[65])) {
-		if ((boi.collide(background[1])) || (boi.collide(background[2])) || (boi.collide(background[3]))) {
-			if (qj.keydown[87]) {
-				boi.x += 1;
-				boiHelp++;
-			}
-			else if (qj.keydown[68]) {
-				boi.y += 1;
-				boiHelp++;
-			}
-			else if (qj.keydown[83]) {
-				boi.x += 1;
-				boiHelp++;
-			}
-			else if (qj.keydown[65]) {
-				boi.y += 1;
-				boiHelp++;
-			}
-		}
-		else {
-			if (qj.keydown[87]) {
-				boi.y -= 5;
-				boiHelp++;
-			}
-			else if (qj.keydown[68]) {
-				boi.x += 5;
-				boiHelp++;
-			}
-			else if (qj.keydown[83]) {
-				boi.y += 5;
-				boiHelp++;
-			}
-			else if (qj.keydown[65]) {
-				boi.x -= 5;
-				boiHelp++;
-			}
-		}
+	if ((boi.collideTop(background[1])) || (boi.collideTop(background[2])) || (boi.collideTop(background[3]))) {
+		console.log("Knock top");
+		if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
+		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
+		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
+		else if (qj.keydown[87]) { boi.x += 1; boiHelp++; }
+	}
+	else if ((boi.collideLeft(background[1])) || (boi.collideLeft(background[2])) || (boi.collideLeft(background[3]))) {
+		console.log("Knock left");
+		if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
+		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
+		else if (qj.keydown[65]) { boi.y += 1; boiHelp++; }
+		else if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
+	}
+	else if ((boi.collideRight(background[1])) || (boi.collideRight(background[2])) || (boi.collideRight(background[3]))) {
+		console.log("Knock right");
+		if (qj.keydown[68]) { boi.y -= 1; boiHelp++; }
+		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
+		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
+		else if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
+	}
+	else if ((boi.collideBottom(background[1])) || (boi.collideBottom(background[2])) || (boi.collideBottom(background[3]))) {
+		console.log("Knock bottom");
+		if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
+		else if (qj.keydown[83]) { boi.x += 1; boiHelp++; }
+		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
+		else if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
+	}
+	else {
+		if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
+		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
+		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
+		else if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
 	}
 
+	// Walking Animation
 	if (boiHelp == 10) {
 		boiHelp = 0;
 		if (boi.src == "images/boi.png") { boi.src = "images/boi2.png"; }
 		else { boi.src = "images/boi.png"; }
 	}
 
+	// Scroll the screen
 	if ((boi.x + 50) > qj.width) {
 		for (i = 0; i < background.length; i++) { background[i].x -= 5; }
 		boi.x -= 5;
@@ -92,6 +90,14 @@ qj.run("House", function() {
 	else if ((boi.x) < 0) {
 		for (i = 0; i < background.length; i++) { background[i].x += 5; }
 		boi.x += 5;
+	}
+	else if ((boi.y + 50) > qj.height) {
+		for (i = 0; i < background.length; i++) { background[i].y -= 5; }
+		boi.y -= 5;
+	}
+	else if ((boi.y) < 0) {
+		for (i = 0; i < background.length; i++) { background[i].y += 5; }
+		boi.y += 5;
 	}
 });
 
