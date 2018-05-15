@@ -58,3 +58,8 @@ body {
 	background-color: grey;; color: black;
 	transition: 0.2s;
 }
+
+@keyframes triangle {
+	0% { top: 550px; }
+	100% { top: 560px; }
+}

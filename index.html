@@ -15,7 +15,7 @@
 		</noscript>
 
 		<div id="Game">
-			<div id="StartScreen" style="display: none;">
+			<div id="StartScreen">
 				<img src="images/SGCC-Start-Screen.gif" style="position: static;" width="800" height="600" />
 				<div style="background-color: rgba(0, 0, 0, 0.7); border-radius: 10px; top: 175px; left: 225px; width: 350px; height: 250px;">
 					<div style="font-size: 60px; color: white; z-index: 2; top: 30px; left: 30px;">HealThem</div>
@@ -61,7 +61,7 @@
 				<div id="Premise-4" style="display: none;">
 					<img src="images/Sed boi.png" width="800" height="450" />
 					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
-						But you, yes you, <span style="display: inline-block; position: static;" class="PlayerName"></span>, have a special ability as people with autism are special. You want change. The spirit of the HealthKnight is burning in you.
+						But you, yes you, <span style="display: inline-block; position: static;" class="PlayerName"></span>, are special. You want change. The spirit of the HealthKnight is burning in you.
 						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('4', '5');">Next ></button>
 					</div>
 				</div>
@@ -75,20 +75,12 @@
 				</div>
 			</div>
 
-			<div id="Tutorial">
+			<div id="Tutorial" style="display: none;">
 				<iframe style="overflow: hidden; border: 0;" src="game.html" width="800" height="600"></iframe>
-				<div id="Snackbar" style="background-color: white; width: 200px; color: black; top: 20px; right: 20px; z-index: 2;">
-					<div style="padding: 10px; position: static;">
-						<i class="fa fa-info-circle" style="position: static; margin-right: 2px;"></i>
-						<span id="Snackbar-Text" style="position: static;">Something's wrong</span>
-					</div>
-					<button id="Snackbar-Button" style="cursor: pointer; background-color: #cdcdcd; position: static; border: 0; display: block; width: 100%; padding: 10px;">Next</button>
-				</div>
 			</div>
 		</div>
 
 		<!--Scripts-->
 		<script src="startscreen.js"></script>
-		<script src="utility.js"></script>
 	</body>
 </html>

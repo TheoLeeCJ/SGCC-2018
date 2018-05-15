@@ -203,9 +203,11 @@ var qj;
 		// Show or hide the qjObject element, by setting 'display: none'
 		qjObject.prototype.hide = function () {
 			this.style.display = 'none';
+			this.element.style.display = 'none';
 		};
 		qjObject.prototype.show = function () {
 			this.style.display = '';
+			this.element.style.display = '';
 		};
 		// .attach() and .detach()
 		// Attach or detach the qjObject's element from DOM
@@ -230,6 +232,16 @@ var qj;
 		// Binds a specific event listener to the qjObject element
 		qjObject.prototype.on = function (event, func) {
 			this.element.addEventListener(event, func);
+		};
+		// .off()
+		// Removes event listeners
+		qjObject.prototype.off = function () {
+			var clone = this.element.cloneNode();
+			while (this.element.firstChild) {
+				clone.appendChild(this.element.lastChild);
+			}
+			this.element.parentNode.replaceChild(clone, this.element);
+			this.element = clone;
 		};
 		// .collide(qjObject obj)
 		// Returns whether or not this qjObject is colliding with another
