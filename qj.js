@@ -259,62 +259,6 @@ var qj;
 			var _a;
 		};
 
-		// .collideLeft(qjObject obj)
-		// Returns whether or not this qjObject's left side is colliding with another
-		qjObject.prototype.collideLeft = function (obj) {
-			// New code by Theo
-			var foo1 = this;
-			var foo2 = obj;
-			
-			if ((foo2.y < (foo1.y)) && ((foo1.y) < (foo2.y + foo2.h))) {
-				if (((foo2.x + foo2.w) > foo1.x) && (foo1.x > foo2.x)) { return true; }
-			}
-
-			return false;
-			var _a;
-		};
-
-		// .collideTop(qjObject obj)
-		// Returns whether or not this qjObject's top side is colliding with another
-		qjObject.prototype.collideTop = function (obj) {
-			// New code by Theo
-			var foo1 = this;
-			var foo2 = obj;
-
-			if ((foo2.x < (foo1.x)) && ((foo1.x) < (foo2.x + foo2.w))) {
-				if (((foo2.y + foo2.h) > foo1.y) && (foo1.y > foo2.y)) { return true; }
-			}
-
-			return false;
-			var _a;
-		};
-
-		// .collideRight(qjObject obj)
-		// Returns whether or not this qjObject's right side is colliding with another
-		qjObject.prototype.collideRight = function (obj) {
-			// New code by Theo
-			var foo1 = this;
-			var foo2 = obj;
-
-			
-
-			return false;
-			var _a;
-		};
-
-		// .collideBottom(qjObject obj)
-		// Returns whether or not this qjObject's bottom side is colliding with another
-		qjObject.prototype.collideBottom = function (obj) {
-			// New code by Theo
-			var foo1 = this;
-			var foo2 = obj;
-
-			
-
-			return false;
-			var _a;
-		};
-
 		// Static
 		qjObject.counter = 0;
 		return qjObject;

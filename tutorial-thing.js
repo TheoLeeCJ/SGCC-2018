@@ -1,33 +1,46 @@
 // Background
-var background = [], boi, currentPosition = "images/boi.png", boiHelp = 0;
+var background = [], boi, currentPosition = "images/boi.png", boiHelp = 0,
+previousKeyStrokes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 qj.run("House", function() {
 	background[0] = qj({
-		type: "image",
-		src: "images/tiles.png",
+		style: {
+			backgroundColor: "rgb(236, 141, 57)"
+		},
 		w: 1600, h: 1200,
 		x: 0, y: 0
 	});
 
 	background[1] = qj({
-		type: "image",
-		src: "images/wall.png",
-		w: 400, h: 70,
-		x: 0, y: 45
+		style: {
+			backgroundColor: "rgb(236, 217, 58)"
+		},
+		w: 1690, h: 45,
+		x: -45, y: 0
 	});
 
 	background[2] = qj({
-		type: "image",
-		src: "images/wall.png",
-		w: 400, h: 70,
-		x: 450, y: 45
+		style: {
+			backgroundColor: "rgb(236, 217, 58)"
+		},
+		w: 1690, h: 45,
+		x: -45, y: 1200
 	});
 
 	background[3] = qj({
-		type: "image",
-		src: "images/small-door.png",
-		w: 50, h: 70,
-		x: 400, y: 45
+		style: {
+			backgroundColor: "rgb(236, 217, 58)"
+		},
+		w: 45, h: 1200,
+		x: -45, y: 45
+	});
+
+	background[4] = qj({
+		style: {
+			backgroundColor: "rgb(236, 217, 58)"
+		},
+		w: 45, h: 1200,
+		x: 1555, y: 45
 	});
 
 	boi = qj({
@@ -40,39 +53,24 @@ qj.run("House", function() {
 	return background;
 }, function() {
 	// Collisions with backgrounds + movement
-	if ((boi.collideTop(background[1])) || (boi.collideTop(background[2])) || (boi.collideTop(background[3]))) {
-		console.log("Knock top");
-		if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
-		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
-		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
-		else if (qj.keydown[87]) { boi.x += 1; boiHelp++; }
-	}
-	else if ((boi.collideLeft(background[1])) || (boi.collideLeft(background[2])) || (boi.collideLeft(background[3]))) {
-		console.log("Knock left");
-		if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
-		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
-		else if (qj.keydown[65]) { boi.y += 1; boiHelp++; }
-		else if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
-	}
-	else if ((boi.collideRight(background[1])) || (boi.collideRight(background[2])) || (boi.collideRight(background[3]))) {
-		console.log("Knock right");
-		if (qj.keydown[68]) { boi.y -= 1; boiHelp++; }
-		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
-		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
-		else if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
-	}
-	else if ((boi.collideBottom(background[1])) || (boi.collideBottom(background[2])) || (boi.collideBottom(background[3]))) {
-		console.log("Knock bottom");
-		if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
-		else if (qj.keydown[83]) { boi.x += 1; boiHelp++; }
-		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
-		else if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
+	if ((boi.collide(background[1])) || (boi.collide(background[2])) || (boi.collide(background[3])) || (boi.collide(background[4]))) {
+		previous = 0;
+		for (i = 45; i < previousKeyStrokes.length; i++) {
+			if (previousKeyStrokes[i - 1] == previousKeyStrokes[i]) { previous++; }
+		}
+
+		if (i > 10) {
+			if (previousKeyStrokes[59] == 87) { boi.x -= 1; boi.y += 2; boiHelp++; }
+			else if (previousKeyStrokes[59] == 83) { boi.x += 1; boi.y -= 2; boiHelp++; }
+			else if (previousKeyStrokes[59] == 65) { boi.y -= 1; boi.x += 2; boiHelp++; }
+			else if (previousKeyStrokes[59] == 68) { boi.y += 1; boi.x -= 2; boiHelp++; }
+		}
 	}
 	else {
-		if (qj.keydown[87]) { boi.y -= 5; boiHelp++; }
-		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; }
-		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; }
-		else if (qj.keydown[68]) { boi.x += 5; boiHelp++; }
+		if (qj.keydown[87]) { boi.y -= 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(87);  }
+		else if (qj.keydown[83]) { boi.y += 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(83); }
+		else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(65); }
+		else if (qj.keydown[68]) { boi.x += 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(68); }
 	}
 
 	// Walking Animation
