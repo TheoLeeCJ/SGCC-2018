@@ -72,15 +72,15 @@ qj.run("House", function() {
 
 	boi = qj({
 		type: "image",
-		src: "images/boi.png",
-		w: 75, h: 75,
+		src: "images/BoyStand_L.png",
+		w: 60, h: 110,
 		x: 350, y: 300
 	});
 
 	background[5] = qj({
 		type: "image",
-		src: "images/grandpa.png",
-		w: 75, h: 75,
+		src: "images/OldManStand_L.png",
+		w: 60, h: 90,
 		x: 200, y: 200
 	});
 
@@ -246,10 +246,10 @@ qj.run("House", function() {
 		}
 
 		// Walking Animation
-		if (boiHelp == 10) {
+		if (boiHelp == 5) {
 			boiHelp = 0;
-			if (boi.src == "images/boi.png") { boi.src = "images/boi2.png"; }
-			else { boi.src = "images/boi.png"; }
+			if (boi.src == "images/BoyStand_L.png") { boi.src = "images/BoyStand_L2.png"; }
+			else { boi.src = "images/BoyStand_L.png"; }
 		}
 
 		// Scroll the screen
