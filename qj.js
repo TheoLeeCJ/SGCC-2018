@@ -61,6 +61,7 @@ var qj;
 			this.offsetY = new_y;
 		},
 		'w': function (v) { this.element.style.width = v + 'px'; },
+		'opacity': function (v) { this.element.style.opacity = v; },
 		'h': function (v) { this.element.style.height = v + 'px'; },
 		'src': function (v) { this.element.src = v; },
 		'html': function (v) { this.element.innerHTML = v; },

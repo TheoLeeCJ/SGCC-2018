@@ -5,9 +5,13 @@ boiHelp = 0,
 grandpaMenu = {},
 previousKeyStrokes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 movementEnabled = false,
-welcome = []
+welcome = [],
 listeningForWASD = false,
-listeningForGrandpa = false;
+listeningForGrandpa = false,
+fadingToCardGame = false,
+fadingIntoCardGame = false,
+blackCover,
+a = 0;
 
 // Welcome
 qj.run("Welcome", function() {
@@ -139,7 +143,7 @@ qj.run("House", function() {
 	});
 
 	grandpaMenu.button1 = qj({
-		text: "Interact",
+		text: "Check",
 		w: 188, h: 45,
 		x: 576, y: 65,
 		style: {
@@ -154,8 +158,40 @@ qj.run("House", function() {
 		}
 	});
 
+	grandpaInfo = qj({
+		x: 570, y: 175,
+		w: 200, h: 300,
+		style: {
+			backgroundColor: "black", color: "white",
+			textAlign: "center",
+			border: "6px solid white",
+			padding: "7.5px"
+		}
+	});
+
+	grandpaInfo.hide();
+
 	grandpaMenu.button1.on("click", function() {
-		
+		grandpaInfo.html = '<div style="color: yellow; margin-bottom: 10px; text-align: center;">CHECK:<br>GRANDPA JOE</div><div style="text-align: center;">Health Problem:<br>Obesity<br><br>Cause:<br>ate too many potato chips and processed foods</div>';
+		grandpaInfo.style.display = "block";
+
+		tutorialHelper.html = 'Now that we know what\'s up with Grandpa, you, as one with the Spirit of HealthKnight, need to help him get healthier. Click on "SAVE".';
+		grandpaMenu.button1.off();
+		grandpaMenu.button1.text = "SAVE";
+
+		grandpaMenu.button1.on("click", function() {
+			fadingToCardGame = true;
+			blackCover.show();
+			setTimeout(function() {
+				fadingToCardGame = false;
+				fadingIntoCardGame = true;
+				qj.stage = "Cards";
+
+				setTimeout(function() {
+					fadingIntoCardGame = false;
+				}, 1000);
+			}, 1000);
+		});
 	});
 
 	grandpaMenu.button2 = qj({
@@ -182,8 +218,31 @@ qj.run("House", function() {
 		movementEnabled = true;
 		boi.x += 10;
 	});
+	
+	blackCover = qj({
+		x: 0, y: 0,
+		w: 800, h: 600,
+		style: {
+			opacity: 0,
+			backgroundColor: "black"
+		}
+	});
 
+	blackCover.hide();
 }, function() {
+	// Curb your BitConnect. Now.
+	if (fadingToCardGame) {
+		console.log("Smth");
+		a += 0.02;
+		blackCover.style.opacity = a;
+	}
+
+	if (fadingIntoCardGame) {
+		console.log("Smth");
+		a -= 0.02;
+		blackCover.style.opacity = a;
+	}
+
 	// Talking to Grandpa?
 	if (boi.collide(background[5])) {
 		grandpaMenu.text.show();
@@ -193,7 +252,7 @@ qj.run("House", function() {
 
 		if (listeningForGrandpa) {
 			listeningForGrandpa = false;
-			tutorialHelper.html = 'When you move to any one of your family members, a dialog with option will come up. Click on "Interact".';
+			tutorialHelper.html = 'When you move to any one of your family members, a dialog with option will come up. Click on "Check".';
 		}
 
 		movementEnabled = false;
