@@ -11,7 +11,8 @@ listeningForGrandpa = false,
 fadingToCardGame = false,
 fadingIntoCardGame = false,
 blackCover,
-a = 0;
+a = 0,
+boiWalking;
 
 // Welcome
 qj.run("Welcome", function() {
@@ -229,7 +230,9 @@ qj.run("House", function() {
 	});
 
 	blackCover.hide();
-}, function() {
+}, function () {
+	boiHelp++;
+
 	// Curb your BitConnect. Now.
 	if (fadingToCardGame) {
 		console.log("Smth");
@@ -291,24 +294,29 @@ qj.run("House", function() {
 			}
 
 			if (i > 10) {
-				if (previousKeyStrokes[59] == 87) { boi.x -= 1; boi.y += 2; boiHelp++; }
-				else if (previousKeyStrokes[59] == 83) { boi.x += 1; boi.y -= 2; boiHelp++; }
-				else if (previousKeyStrokes[59] == 65) { boi.y -= 1; boi.x += 2; boiHelp++; }
-				else if (previousKeyStrokes[59] == 68) { boi.y += 1; boi.x -= 2; boiHelp++; }
+				if (previousKeyStrokes[59] == 87) { boi.x -= 1; boi.y += 2; }
+				else if (previousKeyStrokes[59] == 83) { boi.x += 1; boi.y -= 2; }
+				else if (previousKeyStrokes[59] == 65) { boi.y -= 1; boi.x += 2; }
+				else if (previousKeyStrokes[59] == 68) { boi.y += 1; boi.x -= 2; }
 			}
 		}
 		else {
-			if (qj.keydown[87]) { boi.y -= 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(87);  }
-			else if (qj.keydown[83]) { boi.y += 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(83); }
-			else if (qj.keydown[65]) { boi.x -= 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(65); }
-			else if (qj.keydown[68]) { boi.x += 5; boiHelp++; previousKeyStrokes.shift(); previousKeyStrokes.push(68); }
+			if (qj.keydown[87]) { boiWalking = true; boi.y -= 5; previousKeyStrokes.shift(); previousKeyStrokes.push(87);  }
+			else if (qj.keydown[83]) { boiWalking = true; boi.y += 5; previousKeyStrokes.shift(); previousKeyStrokes.push(83); }
+			else if (qj.keydown[65]) { boiWalking = true; boi.x -= 5; previousKeyStrokes.shift(); previousKeyStrokes.push(65); }
+			else if (qj.keydown[68]) { boiWalking = true; boi.x += 5; previousKeyStrokes.shift(); previousKeyStrokes.push(68); }
+			else { boiWalking = false; }
 		}
 
 		// Walking Animation
-		if (boiHelp == 5) {
-			boiHelp = 0;
-			if (boi.src == "images/BoyStand_L.png") { boi.src = "images/BoyStand_L2.png"; }
-			else { boi.src = "images/BoyStand_L.png"; }
+		if (boiWalking === true) {
+			if (boiHelp == 7) {
+				boiHelp = 0;
+				if (boi.src == "images/BoyStand_L.png") { boi.src = "images/BoyWalk_L1.png"; }
+				else if (boi.src == "images/BoyWalk_L1.png") { boi.src = "images/BoyWalk_L2.png"; }
+				else if (boi.src == "images/BoyWalk_L2.png") { boi.src = "images/BoyStand_L.png"; }
+				else { boi.src = "images/BoyWalk_L1.png"; }
+			}
 		}
 
 		// Scroll the screen
@@ -328,6 +336,13 @@ qj.run("House", function() {
 			for (i = 0; i < background.length; i++) { background[i].y += 5; }
 			boi.y += 5;
 		}
+	}
+
+	// Breathing animation
+	if (boiHelp == 30) {
+		boiHelp = 0;
+		if (boi.src == "images/BoyStand_L.png") { boi.src = "images/BoyStand_L2.png"; }
+		else { boi.src = "images/BoyStand_L.png"; }
 	}
 });
 
