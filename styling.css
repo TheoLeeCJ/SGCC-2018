@@ -61,5 +61,6 @@ body {
 
 @keyframes triangle {
 	0% { top: 550px; }
-	100% { top: 560px; }
+	50% { top: 560px; }
+	100% { top: 550px; }
 }

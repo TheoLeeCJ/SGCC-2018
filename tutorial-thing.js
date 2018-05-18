@@ -85,7 +85,7 @@ qj.run("House", function() {
 	});
 
 	tutorialHelper = qj({
-		html: '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Welcome to the HealThem Tutorial Level!<br>Click on the white arrow on the bottom right to continue.',
+		html: '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Welcome to the HealThem Tutorial Level, ' + sessionStorage.getItem("name") + '!<br>Click on the white arrow on the bottom right to continue.',
 		w: 800, h: 100,
 		x: 0, y: 500,
 		style: {
@@ -155,7 +155,7 @@ qj.run("House", function() {
 	});
 
 	grandpaMenu.button1.on("click", function() {
-
+		
 	});
 
 	grandpaMenu.button2 = qj({
