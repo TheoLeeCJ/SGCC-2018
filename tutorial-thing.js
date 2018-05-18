@@ -12,7 +12,8 @@ fadingToCardGame = false,
 fadingIntoCardGame = false,
 blackCover,
 a = 0,
-boiWalking;
+boiWalking,
+direction = "L";
 
 // Welcome
 qj.run("Welcome", function() {
@@ -37,10 +38,17 @@ qj.run("Welcome", function() {
 qj.run("House", function() {
 	background[0] = qj({
 		style: {
-			backgroundColor: "rgb(236, 141, 57)"
+			backgroundImage: "url('images/FloorTile.png')"
 		},
 		w: 1600, h: 1200,
 		x: 0, y: 0
+	});
+
+	background[6] = qj({
+		x: 600, y: 100,
+		w: 200, h: 75,
+		type: "image",
+		src: "images/iBed.png"
 	});
 
 	background[1] = qj({
@@ -287,7 +295,7 @@ qj.run("House", function() {
 
 	// Collisions with backgrounds + movement
 	if (movementEnabled) {
-		if ((boi.collide(background[1])) || (boi.collide(background[2])) || (boi.collide(background[3])) || (boi.collide(background[4]))) {
+		if ((boi.collide(background[1])) || (boi.collide(background[2])) || (boi.collide(background[3])) || (boi.collide(background[4])) || (boi.collide(background[6]))) {
 			previous = 0;
 			for (i = 45; i < previousKeyStrokes.length; i++) {
 				if (previousKeyStrokes[i - 1] == previousKeyStrokes[i]) { previous++; }
@@ -303,8 +311,8 @@ qj.run("House", function() {
 		else {
 			if (qj.keydown[87]) { boiWalking = true; boi.y -= 5; previousKeyStrokes.shift(); previousKeyStrokes.push(87);  }
 			else if (qj.keydown[83]) { boiWalking = true; boi.y += 5; previousKeyStrokes.shift(); previousKeyStrokes.push(83); }
-			else if (qj.keydown[65]) { boiWalking = true; boi.x -= 5; previousKeyStrokes.shift(); previousKeyStrokes.push(65); }
-			else if (qj.keydown[68]) { boiWalking = true; boi.x += 5; previousKeyStrokes.shift(); previousKeyStrokes.push(68); }
+			else if (qj.keydown[65]) { boi.src = boi.src.replace("_R", "_L"); direction = "L"; boiWalking = true; boi.x -= 5; previousKeyStrokes.shift(); previousKeyStrokes.push(65); }
+			else if (qj.keydown[68]) { boi.src = boi.src.replace("_L", "_R"); direction = "R"; boiWalking = true; boi.x += 5; previousKeyStrokes.shift(); previousKeyStrokes.push(68); }
 			else { boiWalking = false; }
 		}
 
@@ -312,27 +320,27 @@ qj.run("House", function() {
 		if (boiWalking === true) {
 			if (boiHelp == 7) {
 				boiHelp = 0;
-				if (boi.src == "images/BoyStand_L.png") { boi.src = "images/BoyWalk_L1.png"; }
-				else if (boi.src == "images/BoyWalk_L1.png") { boi.src = "images/BoyWalk_L2.png"; }
-				else if (boi.src == "images/BoyWalk_L2.png") { boi.src = "images/BoyStand_L.png"; }
-				else { boi.src = "images/BoyWalk_L1.png"; }
+				if (boi.src == "images/BoyStand_" + direction + ".png") { boi.src = "images/BoyWalk_" + direction + "1.png"; }
+				else if (boi.src == "images/BoyWalk_" + direction + "1.png") { boi.src = "images/BoyWalk_" + direction + "2.png"; }
+				else if (boi.src == "images/BoyWalk_" + direction + "2.png") { boi.src = "images/BoyStand_" + direction + ".png"; }
+				else { boi.src = "images/BoyWalk_" + direction + "1.png"; }
 			}
 		}
 
 		// Scroll the screen
-		if ((boi.x + 50) > qj.width) {
+		if ((boi.x + 110) > qj.width) {
 			for (i = 0; i < background.length; i++) { background[i].x -= 5; }
 			boi.x -= 5;
 		}
-		else if ((boi.x) < 0) {
+		else if ((boi.x) < 60) {
 			for (i = 0; i < background.length; i++) { background[i].x += 5; }
 			boi.x += 5;
 		}
-		else if ((boi.y + 50) > qj.height) {
+		else if ((boi.y + 110) > qj.height) {
 			for (i = 0; i < background.length; i++) { background[i].y -= 5; }
 			boi.y -= 5;
 		}
-		else if ((boi.y) < 0) {
+		else if ((boi.y) < 60) {
 			for (i = 0; i < background.length; i++) { background[i].y += 5; }
 			boi.y += 5;
 		}
@@ -341,8 +349,8 @@ qj.run("House", function() {
 	// Breathing animation
 	if (boiHelp == 30) {
 		boiHelp = 0;
-		if (boi.src == "images/BoyStand_L.png") { boi.src = "images/BoyStand_L2.png"; }
-		else { boi.src = "images/BoyStand_L.png"; }
+		if (boi.src == "images/BoyStand_" + direction + ".png") { boi.src = "images/BoyStand_" + direction + "2.png"; }
+		else { boi.src = "images/BoyStand_" + direction + ".png"; }
 	}
 });
 
