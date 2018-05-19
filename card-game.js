@@ -3,6 +3,58 @@ villain, villainBreathe = 0,
 goodBoi,
 people = [];
 
+var stats = {
+	health: 100,
+	enemy: 500
+};
+
+var cardsInfo = [
+	{
+		image: "cards/Card_EatYourVeggies.png",
+		action: function() {
+			stats.health += 5;
+			AddHealth();
+			UpdateStats();
+			setTimeout(function() { Attack(); }, 1000);
+		}
+	},
+	{
+		image: "cards/Card_SayNoToConk.png",
+		action: function () {
+
+		}
+	},
+	{
+		image: "cards/Card_Exercise.png",
+		action: function () {
+
+		}
+	},
+	{
+		image: "cards/Card_Research.png",
+		action: function () {
+
+		}
+	}
+];
+
+function AddHealth() {
+	thing1.style.animation = "bar 2s infinite";
+	setTimeout(function() {
+		thing1.style.animation = "";
+
+		hpPlus.style.animation = "hpPlus 2s infinite";
+		hpPlus.show();
+
+		setTimeout(function () { hpPlus.style.animation = ""; hpPlus.hide(); }, 2000);
+	}, 2000);
+}
+
+function UpdateStats() {
+	cards[2].text = "You: " + stats.health + " HP";
+	cards[3].text = "MegaCorp Spirit: " + stats.enemy + " HP";
+}
+
 qj.run("Cards", function () {
 	fightBackground = qj({
 		w: 800, h: 400,
@@ -10,6 +62,28 @@ qj.run("Cards", function () {
 		style: {
 			backgroundColor: "white"
 		}
+	});
+
+	// Animation Things
+	thing1 = qj({
+		w: 100, h: 40,
+		x: 500, y: -40,
+		text: "HP",
+		style: {
+			backgroundColor: "green", color: "white"
+		}
+	});
+
+	hpPlus = qj({
+		x: 480, y: 330,
+		style: {
+			animationTimingFunction: "ease-in-out",
+			color: "green",
+			zIndex: "3",
+			fontSize: "2rem",
+			display: "none"
+		},
+		html: "<i class='fa fa-arrow-up'></i> HP UP!"
 	});
 
 	// Cards Area
@@ -38,7 +112,7 @@ qj.run("Cards", function () {
 			backgroundColor: "red", color: "white",
 			textAlign: "center"
 		},
-		text: "Opponent: 500 HP"
+		text: "MegaCorp Spirit: 500 HP"
 	});
 
 	cards[4] = qj({
@@ -128,6 +202,7 @@ qj.run("Cards", function () {
 		cardInfo.hide();
 
 		// Assign Cards
+		cards[4].on("click", cardsInfo[0].action);
 	});
 
 	// Triangle
