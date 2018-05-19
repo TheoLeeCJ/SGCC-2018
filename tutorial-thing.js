@@ -198,6 +198,7 @@ qj.run("House", function() {
 
 				setTimeout(function() {
 					fadingIntoCardGame = false;
+					blackdrop.hide();
 				}, 1000);
 			}, 1000);
 		});
@@ -245,12 +246,6 @@ qj.run("House", function() {
 	if (fadingToCardGame) {
 		console.log("Smth");
 		a += 0.02;
-		blackCover.style.opacity = a;
-	}
-
-	if (fadingIntoCardGame) {
-		console.log("Smth");
-		a -= 0.02;
 		blackCover.style.opacity = a;
 	}
 

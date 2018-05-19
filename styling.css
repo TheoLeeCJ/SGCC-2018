@@ -64,3 +64,9 @@ body {
 	50% { top: 560px; }
 	100% { top: 550px; }
 }
+
+@keyframes threeSidedThing {
+	0% { top: 250px; }
+	50% { top: 265px; }
+	100% { top: 250px; }
+}
