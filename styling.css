@@ -71,6 +71,12 @@ body {
 	100% { top: 250px; }
 }
 
+@keyframes turn {
+	0% { opacity: 0; }
+	50% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
 @keyframes hpPlus {
 	0% { top: 350px; opacity: 0; }
 	50% { top: 330px; opacity: 1; }
@@ -79,16 +85,16 @@ body {
 
 @keyframes bar {
 	0% { top: -40px; }
-	49% { top: 60px; opacity: 1.0; }
-	50% { top: 60px; opacity: 0; }
-	59% { top: 60px; opacity: 0; }
-	60% { top: 60px; opacity: 1.0; }
-	69% { top: 60px; opacity: 1.0; }
-	70% { top: 60px; opacity: 0; }
-	79% { top: 60px; opacity: 0; }
-	80% { top: 60px; opacity: 1.0; }
-	89% { top: 60px; opacity: 1.0; }
-	90% { top: 60px; opacity: 0; }
-	99% { top: 60px; opacity: 0; }
-	100% { top: 60px; opacity: 1.0; }
+	49% { top: 70px; opacity: 1.0; }
+	50% { top: 70px; opacity: 0; }
+	59% { top: 70px; opacity: 0; }
+	60% { top: 70px; opacity: 1.0; }
+	69% { top: 70px; opacity: 1.0; }
+	70% { top: 70px; opacity: 0; }
+	79% { top: 70px; opacity: 0; }
+	80% { top: 70px; opacity: 1.0; }
+	89% { top: 70px; opacity: 1.0; }
+	90% { top: 70px; opacity: 0; }
+	99% { top: 70px; opacity: 0; }
+	100% { top: 70px; opacity: 1.0; }
 }

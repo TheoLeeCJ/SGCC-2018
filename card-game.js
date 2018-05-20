@@ -15,7 +15,7 @@ var cardsInfo = [
 			stats.health += 5;
 			AddHealth();
 			UpdateStats();
-			setTimeout(function() { Attack(); }, 1000);
+			setTimeout(function() { SwitchTurn("MegaCorp Spirit's Turn"); }, 4000);
 		}
 	},
 	{
@@ -47,6 +47,21 @@ function AddHealth() {
 		hpPlus.show();
 
 		setTimeout(function () { hpPlus.style.animation = ""; hpPlus.hide(); }, 2000);
+	}, 2000);
+}
+
+function SwitchTurn(text) {
+	turn.text = text;
+	turn.show();
+	turn.style.animation = "turn 2s infinite";
+
+	if (text !== "Your Turn") {
+		
+	}
+	
+	setTimeout(function () {
+		turn.style.animation = "";
+		turn.hide();
 	}, 2000);
 }
 
@@ -83,7 +98,22 @@ qj.run("Cards", function () {
 			fontSize: "2rem",
 			display: "none"
 		},
-		html: "<i class='fa fa-arrow-up'></i> HP UP!"
+		html: "<i class='fa fa-arrow-up'></i>&nbsp;&nbsp;HP UP!"
+	});
+
+	// Turn Indicator
+	turn = qj({
+		x: 200, y: 270,
+		w: 400, h: 60,
+		style: {
+			backgroundColor: "rgba(0, 0, 0, 0.7)", color: "white",
+			backdropFilter: "blur(3px)",
+			animationTimingFunction: "ease-in-out",
+			fontSize: "2rem",
+			zIndex: "3",
+			display: "none"
+		},
+		text: "MegaCorp Spririt's Turn"
 	});
 
 	// Cards Area
