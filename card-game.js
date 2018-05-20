@@ -1,39 +1,82 @@
 var cards = [],
 villain, villainBreathe = 0,
 goodBoi,
-people = [];
+people = [],
+enemyIsAttacking = false, playerIsAttacking = false,
+damageDoneEnemy = 20, damageDoneSelf = 20;
 
 var stats = {
 	health: 100,
 	enemy: 500
 };
 
+var enemyActions = ["doughnut.png", "ice-cream.png"];
+
 var cardsInfo = [
 	{
 		image: "cards/Card_EatYourVeggies.png",
 		action: function() {
-			stats.health += 5;
+			b = this;
+			c = Random(0, cardsInfo.length - 1);
+
+			stats.health += 10;
 			AddHealth();
 			UpdateStats();
+
+			setTimeout(function() {
+				b.style.animation = "cardUsed 0.5s infinite";
+
+				setTimeout(function() {
+					b.removeEventListener("click", cardsInfo[0].action);
+					b.addEventListener("click", cardsInfo[c].action);
+					b.src = cardsInfo[c].image;
+
+					setTimeout(function() {
+						b.style.animation = "";
+					}, 20);
+				}, 499);
+			}, 3500);
+
 			setTimeout(function() { SwitchTurn("MegaCorp Spirit's Turn"); }, 4000);
 		}
 	},
 	{
 		image: "cards/Card_SayNoToConk.png",
 		action: function () {
-
-		}
-	},
-	{
-		image: "cards/Card_Exercise.png",
-		action: function () {
-
+			stats.enemy -= damageDoneSelf;
+			DamageEnemy();
+			UpdateStats();
+			setTimeout(function () { SwitchTurn("MegaCorp Spirit's Turn"); }, 3500);
 		}
 	},
 	{
 		image: "cards/Card_Research.png",
 		action: function () {
+			damageDoneEnemy--;
 
+			turn.text = "Enemy does less damage now.";
+			turn.show();
+			turn.style.animation = "turn 2s infinite";
+
+			setTimeout(function () {
+				turn.style.animation = "";
+				turn.hide();
+			}, 2000);
+			
+			setTimeout(function () { SwitchTurn("MegaCorp Spirit's Turn"); }, 3500);
+		}
+	},
+	{
+		image: "cards/Card_Exercise.png",
+		action: function () {
+			damageDoneSelf++;
+
+			hpPlus.html = "<i class='fa fa-arrow-up'></i>&nbsp;&nbsp;DMG UP!";
+			hpPlus.style.animation = "hpPlus 2s infinite";
+			hpPlus.show();
+
+			UpdateStats();
+			setTimeout(function () { SwitchTurn("MegaCorp Spirit's Turn"); }, 3500);
 		}
 	}
 ];
@@ -56,13 +99,30 @@ function SwitchTurn(text) {
 	turn.style.animation = "turn 2s infinite";
 
 	if (text !== "Your Turn") {
-		
+		setTimeout(function () {
+			attack.src = "images/" + enemyActions[Random(0, 1)];
+			enemyIsAttacking = true;
+
+			setTimeout(function () { attack.hide(); enemyIsAttacking = false; SwitchTurn("Your Turn"); }, 7000);
+		}, 500);
+	}
+	else {
+
 	}
 	
 	setTimeout(function () {
 		turn.style.animation = "";
 		turn.hide();
 	}, 2000);
+}
+
+function DamageEnemy() {
+	villain.style.animation = "enemyHurt 0.25s infinite";
+	enemyHpMinus.style.animation = "hpPlus 2s infinite";
+	enemyHpMinus.show();
+
+	setTimeout(function () { villain.style.animation = ""; }, 250);
+	setTimeout(function () { enemyHpMinus.style.animation = ""; enemyHpMinus.hide(); }, 2000);
 }
 
 function UpdateStats() {
@@ -76,6 +136,16 @@ qj.run("Cards", function () {
 		x: 0, y: 0,
 		style: {
 			backgroundColor: "white"
+		}
+	});
+
+	furniture1 = qj({
+		x: -100, y: 210,
+		h: 200,
+		type: "image",
+		src: "images/iBed.png",
+		style: {
+			filter: "blur(2px)"
 		}
 	});
 
@@ -101,6 +171,30 @@ qj.run("Cards", function () {
 		html: "<i class='fa fa-arrow-up'></i>&nbsp;&nbsp;HP UP!"
 	});
 
+	enemyHpMinus = qj({
+		x: 100, y: 330,
+		style: {
+			animationTimingFunction: "ease-in-out",
+			color: "red",
+			zIndex: "3",
+			fontSize: "2rem",
+			display: "none"
+		},
+		html: "<i class='fa fa-arrow-down'></i>&nbsp;&nbsp;HP DOWN!"
+	});
+
+	hpMinus = qj({
+		x: 440, y: 330,
+		style: {
+			animationTimingFunction: "ease-in-out",
+			color: "red",
+			zIndex: "3",
+			fontSize: "2rem",
+			display: "none"
+		},
+		html: "<i class='fa fa-arrow-down'></i>&nbsp;&nbsp;HP DOWN"
+	});
+
 	// Turn Indicator
 	turn = qj({
 		x: 200, y: 270,
@@ -114,6 +208,16 @@ qj.run("Cards", function () {
 			display: "none"
 		},
 		text: "MegaCorp Spririt's Turn"
+	});
+
+	// Attack Sprite
+	attack = qj({
+		type: "image",
+		x: 100, y: 75,
+		w: 75, h: 75,
+		style: {
+			display: "none"
+		}
 	});
 
 	// Cards Area
@@ -179,6 +283,23 @@ qj.run("Cards", function () {
 		}
 	});
 
+	cards[6] = qj({
+		w: 200, h: 300,
+		x: 550, y: 475,
+		type: "image",
+		src: "cards/Card_Research.png",
+		style: {
+			boxShadow: "10px 10px 5px rgb(0, 0, 0)",
+			cursor: "pointer",
+			zIndex: "2"
+		},
+		hover: {
+			transition: "all 0.2s",
+			top: "265px", left: "540px",
+			boxShadow: "30px 30px 30px rgb(0, 0, 0)",
+		}
+	});
+
 	// Battle Area
 	villain = qj({
 		w: 150, h: 300,
@@ -232,7 +353,11 @@ qj.run("Cards", function () {
 		cardInfo.hide();
 
 		// Assign Cards
-		cards[4].on("click", cardsInfo[0].action);
+		for (i = 0; i < 3; i++) {
+			cards[i + 4].off();
+			cards[i + 4].on("click", cardsInfo[i].action);
+			cards[i + 4].src = cardsInfo[i].image;
+		}
 	});
 
 	// Triangle
@@ -285,19 +410,53 @@ qj.run("Cards", function () {
 		else { villain.src = "images/VillainStand_R.png"; }
 
 		if (goodBoi.src == "images/BoyStand_L.png") { goodBoi.src = "images/BoyStand_L2.png"; }
-		else { goodBoi.src = "images/BoyStand_L.png"; }
+		else if(goodBoi.src == "images/BoyStand_L2.png") { goodBoi.src = "images/BoyStand_L.png"; }
 	}
 
 	// Stuff happens
 	if (fadingIntoCardGame) {
 		console.log("Smth");
 		a -= 0.02;
+		cardInfo.style.display = "block";
+		threeSidedThing.show();
 		blackdrop.style.opacity = a;
+	}
+
+	// Attacking Stuff
+	if (enemyIsAttacking) {
+		attack.show();
+
+		if (attack.x > 900) { attack.x = 100; }
+		else { attack.x += 4; }
+
+		if (attack.collide(goodBoi)) {
+			attack.x = 100;
+
+			stats.health -= damageDoneEnemy;
+			UpdateStats();
+
+			goodBoi.style.animation = "boiHurt 0.25s infinite";
+
+			hpMinus.style.animation = "hpPlus 0.75s infinite";
+			hpMinus.show();
+
+			setTimeout(function () { hpMinus.style.animation = ""; hpMinus.hide(); }, 750);
+			setTimeout(function () { goodBoi.style.animation = ""; }, 250);
+		}
+
+		if (qj.keydown[83]) {
+			goodBoi.y = 156;
+			goodBoi.src = "images/BoyCrouch.png";
+		}
+		else {
+			goodBoi.y = 126;
+			goodBoi.src = "images/BoyStand_L.png";
+		}
 	}
 });
 
 // DEBUG CODE
-a = 1.0;
+/*a = 1.0;
 fadingIntoCardGame = true;
 
 qj.stage = "Cards";
@@ -307,5 +466,5 @@ setTimeout(function () {
 	cardInfo.style.display = "block";
 	threeSidedThing.show();
 	blackdrop.hide();
-}, 1000);
+}, 1000);*/
 // END OF DEBUG CODE

@@ -77,6 +77,26 @@ body {
 	100% { opacity: 0; }
 }
 
+@keyframes boiHurt {
+	0% { left: 490px; }
+	33% { left: 510px; }
+	66% { left: 490px; }
+	100% { left: 510px; }
+}
+
+@keyframes cardUsed {
+	0% { top: 475px; transform: scale(1); }
+	50% { top: 200px; transform: scale(1); }
+	100% { top: 200px; transform: scale(0); }
+}
+
+@keyframes enemyHurt {
+	0% { left: 90px; }
+	33% { left: 110px; }
+	66% { left: 90px; }
+	100% { left: 110px; }
+}
+
 @keyframes hpPlus {
 	0% { top: 350px; opacity: 0; }
 	50% { top: 330px; opacity: 1; }
