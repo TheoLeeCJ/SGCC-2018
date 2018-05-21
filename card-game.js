@@ -7,79 +7,38 @@ damageDoneEnemy = 20, damageDoneSelf = 20;
 
 var stats = {
 	health: 100,
-	enemy: 500
+	enemy: 170
 };
 
 var enemyActions = ["doughnut.png", "ice-cream.png"];
 
-var cardsInfo = [
-	{
-		image: "cards/Card_EatYourVeggies.png",
-		action: function() {
-			b = this;
-			c = Random(0, cardsInfo.length - 1);
+function SwitchCard(card) {
+	b = card;
+	currentId = b.id;
+	b.id = Random(0, 100);
+	b.style.filter = "grayscale(100%)";
 
-			stats.health += 10;
-			AddHealth();
-			UpdateStats();
+	for (i = 0; i < cardsInfo.length; i++) {
+		b.removeEventListener("click", cardsInfo[i].action);
+	}
 
-			setTimeout(function() {
-				b.style.animation = "cardUsed 0.5s infinite";
+	c = Random(0, cardsInfo.length - 1);
 
-				setTimeout(function() {
-					b.removeEventListener("click", cardsInfo[0].action);
-					b.addEventListener("click", cardsInfo[c].action);
-					b.src = cardsInfo[c].image;
+	setTimeout(function () {
+		b.style.animation = "cardUsed 0.5s infinite";
 
-					setTimeout(function() {
-						b.style.animation = "";
-					}, 20);
-				}, 499);
-			}, 3500);
-
-			setTimeout(function() { SwitchTurn("MegaCorp Spirit's Turn"); }, 4000);
-		}
-	},
-	{
-		image: "cards/Card_SayNoToConk.png",
-		action: function () {
-			stats.enemy -= damageDoneSelf;
-			DamageEnemy();
-			UpdateStats();
-			setTimeout(function () { SwitchTurn("MegaCorp Spirit's Turn"); }, 3500);
-		}
-	},
-	{
-		image: "cards/Card_Research.png",
-		action: function () {
-			damageDoneEnemy--;
-
-			turn.text = "Enemy does less damage now.";
-			turn.show();
-			turn.style.animation = "turn 2s infinite";
+		setTimeout(function () {
+			b.addEventListener("click", cardsInfo[c].action);
+			b.src = cardsInfo[c].image;
+			b.style.filter = "";
 
 			setTimeout(function () {
-				turn.style.animation = "";
-				turn.hide();
-			}, 2000);
-			
-			setTimeout(function () { SwitchTurn("MegaCorp Spirit's Turn"); }, 3500);
-		}
-	},
-	{
-		image: "cards/Card_Exercise.png",
-		action: function () {
-			damageDoneSelf++;
-
-			hpPlus.html = "<i class='fa fa-arrow-up'></i>&nbsp;&nbsp;DMG UP!";
-			hpPlus.style.animation = "hpPlus 2s infinite";
-			hpPlus.show();
-
-			UpdateStats();
-			setTimeout(function () { SwitchTurn("MegaCorp Spirit's Turn"); }, 3500);
-		}
-	}
-];
+				b.style.animation = "";
+				b.id = currentId;
+			}, 20);
+		}, 499);
+	}, 3500);
+}
 
 function AddHealth() {
 	thing1.style.animation = "bar 2s infinite";
@@ -103,11 +62,16 @@ function SwitchTurn(text) {
 			attack.src = "images/" + enemyActions[Random(0, 1)];
 			enemyIsAttacking = true;
 
+			tip.show();
+
 			setTimeout(function () { attack.hide(); enemyIsAttacking = false; SwitchTurn("Your Turn"); }, 7000);
 		}, 500);
+
+		blocker.show();
 	}
 	else {
-
+		blocker.hide();
+		tip.hide();
 	}
 	
 	setTimeout(function () {
@@ -120,6 +84,8 @@ function DamageEnemy() {
 	villain.style.animation = "enemyHurt 0.25s infinite";
 	enemyHpMinus.style.animation = "hpPlus 2s infinite";
 	enemyHpMinus.show();
+
+	punch.play();
 
 	setTimeout(function () { villain.style.animation = ""; }, 250);
 	setTimeout(function () { enemyHpMinus.style.animation = ""; enemyHpMinus.hide(); }, 2000);
@@ -246,7 +212,7 @@ qj.run("Cards", function () {
 			backgroundColor: "red", color: "white",
 			textAlign: "center"
 		},
-		text: "MegaCorp Spirit: 500 HP"
+		text: "MegaCorp Spirit: 170 HP"
 	});
 
 	cards[4] = qj({
@@ -300,6 +266,17 @@ qj.run("Cards", function () {
 		}
 	});
 
+	// Card Blocker
+	blocker = qj({
+		w: 800, h: 150,
+		x: 0, y: 450,
+		style: {
+			backgroundColor: "rgba(0, 0, 0, 0.7)",
+			display: "none",
+			zIndex: "3"
+		}
+	});
+
 	// Battle Area
 	villain = qj({
 		w: 150, h: 300,
@@ -314,6 +291,13 @@ qj.run("Cards", function () {
 		type: "image",
 		src: "images/BoyStand_L.png"
 	});
+
+	tip = qj({
+		x: 500, y: 300,
+		text: "Press S to dodge attacks."
+	});
+
+	tip.hide();
 
 	// Info Cards
 	cardInfo = qj({
@@ -383,7 +367,7 @@ qj.run("Cards", function () {
 			cardInfo.h = "200";
 			cardInfo.style.top = "400px";
 			cardInfo.style.paddingTop = "10px";
-			cardInfo.html = "<div style='font-size: 2rem;'><i class='fa fa-arrow-up'></i>&nbsp;&nbsp;&nbsp;Battle Arena</div><br>This is where you get to see MegaCorp Spirit getting defeated by you. When the MagaCorp Spirit attacks, use the Down Arrow Key to dodge the attacks.<br><br>Are you ready for battle, " + sessionStorage.getItem("name") + "?";
+			cardInfo.html = "<div style='font-size: 2rem;'><i class='fa fa-arrow-up'></i>&nbsp;&nbsp;&nbsp;Battle Arena</div><br>This is where you get to see the battle. When the MagaCorp Spirit attacks, use the 'S' Key to dodge the attacks.<br><br>Are you ready for battle, " + sessionStorage.getItem("name") + "?";
 
 			fightButton.show();
 			threeSidedThing.hide();
@@ -399,8 +383,49 @@ qj.run("Cards", function () {
 			backgroundColor: "black"
 		}
 	});
+
+	// You lost
+	lost = qj({
+		w: 800, h: 600,
+		x: 0, y: 0,
+		style: {
+			opacity: "0",
+			transition: "all 3s",
+			backgroundColor: "rgba(0, 0, 0, 0.7)", color: "white",
+			zIndex: "5",
+			display: "none"
+		},
+		html: "<div style='display: block;'><div style='font-size: 2rem;'>You Lost</div><br>Press Ctrl + R to restart</div>"
+	});
 }, function() {
 	villainBreathe++;
+
+	// Health Check (lol)
+	if (stats.health < 0) {
+		enemyIsAttacking = false;
+		document.getElementsByClassName("qj-container")[0].style.filter = "grayscale(100%)";
+		setTimeout(function() {
+			lost.show();
+			lost.style.opacity = "1.0";
+		}, 750);
+	}
+
+	if (stats.enemy < 0) {
+		enemyIsAttacking = false;
+		document.getElementsByClassName("qj-container")[0].style.filter = "grayscale(100%)";
+		setTimeout(function () {
+			lost.html = "<div style='display: block;'><div style='font-size: 2rem;'>You Win!</div>";
+			lost.show();
+			lost.style.opacity = "1.0";
+
+			setTimeout(function() {
+				blackCover.opacity = "0";
+				blackCover.hide();
+				won = true;
+				qj.stage = "House";
+			}, 1000);
+		}, 750);
+	}
 
 	// Breathing Animations
 	if (villainBreathe == 30) {
@@ -431,6 +456,7 @@ qj.run("Cards", function () {
 
 		if (attack.collide(goodBoi)) {
 			attack.x = 100;
+			punch.play();
 
 			stats.health -= damageDoneEnemy;
 			UpdateStats();

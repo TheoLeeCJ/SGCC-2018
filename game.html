@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>What?</title>
+	<title>Internals</title>
 	
 	<link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
 	<link href="styling.css" rel="stylesheet" />
@@ -11,9 +11,26 @@
 </head>
 
 <body>
+	<!--Music-->
+	<script>
+		// Card Game
+		mountain = new Audio('others/mountain.mp3');
+		mountain.addEventListener('ended', function () {
+			this.currentTime = 0;
+			this.play();
+		}, false);
+
+		// Punch
+		punch = new Audio('others/punch.mp3');
+		punch.addEventListener('ended', function () {
+			this.currentTime = 0;
+		}, false);
+	</script>
+
 	<script src='qj.js'></script>
 	<script src="tutorial-thing.js"></script>
 	<script src="card-game.js"></script>
+	<script src="cards.js"></script>
 
 	<noscript style="color: white;">
 		Please turn on JavaScript for this video game to work.

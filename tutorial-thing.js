@@ -13,7 +13,8 @@ fadingIntoCardGame = false,
 blackCover,
 a = 0,
 boiWalking,
-direction = "L";
+direction = "L",
+won = false;
 
 // Welcome
 qj.run("Welcome", function() {
@@ -195,6 +196,7 @@ qj.run("House", function() {
 				fadingToCardGame = false;
 				fadingIntoCardGame = true;
 				qj.stage = "Cards";
+				mountain.play();
 
 				setTimeout(function() {
 					fadingIntoCardGame = false;
@@ -262,6 +264,24 @@ qj.run("House", function() {
 		}
 
 		movementEnabled = false;
+	}
+
+	// Won?
+	if (won) {
+		grandpaMenu.text.hide();
+		grandpaMenu.background.hide();
+		grandpaMenu.button1.hide();
+		grandpaMenu.button2.hide();
+		
+		grandpaInfo.hide();
+
+		tutorialTriangle.off();
+		tutorialTriangle.show();
+		tutorialTriangle.on("click", function() {
+			tutorialHelper.html = "Thank you for trying out the HealThem Tutorial Level!";
+			tutorialTriangle.hide();
+		});
+		tutorialHelper.html = "Congratulations! You have successfully removed the MegaCorp Spirit from Grandpa, and he is now on the road to recovery.";
 	}
 
 	// Listetning for Movement
