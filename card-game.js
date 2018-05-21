@@ -293,7 +293,7 @@ qj.run("Cards", function () {
 	});
 
 	tip = qj({
-		x: 500, y: 300,
+		x: 600, y: 400,
 		text: "Press S to dodge attacks."
 	});
 
