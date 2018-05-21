@@ -68,12 +68,16 @@ var cardsInfo = [
 			hpPlus.style.animation = "hpPlus 2s infinite";
 			hpPlus.show();
 
+			setTimeout(function() {
+				hpPlus.style.animation = "";
+			}, 2000);
+
 			SwitchCard(this);
 
 			UpdateStats();
 			setTimeout(function () {
 				hpPlus.html = "<i class='fa fa-arrow-up'></i>&nbsp;&nbsp;&nbsp;HP UP!";
-				hpPlus.style.animation = "";
+				hpPlus.hide();
 				SwitchTurn("MegaCorp Spirit's Turn"); 
 			}, 3500);
 		}
