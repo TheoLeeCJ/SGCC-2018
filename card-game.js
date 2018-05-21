@@ -414,7 +414,7 @@ qj.run("Cards", function () {
 		enemyIsAttacking = false;
 		document.getElementsByClassName("qj-container")[0].style.filter = "grayscale(100%)";
 		setTimeout(function () {
-			lost.html = "<div style='display: block;'><div style='font-size: 2rem;'>You Win!</div>";
+			lost.html = "<div style='display: block;'><div style='font-size: 2rem;'>You Win!</div>Thank you for completing the HealThem tutorial level. Thanks to you, Grandpa is now free of MegaCorp Spirit and is now on the road to recovery.</div>";
 			lost.show();
 			lost.style.opacity = "1.0";
 

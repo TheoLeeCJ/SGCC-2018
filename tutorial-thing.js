@@ -45,13 +45,6 @@ qj.run("House", function() {
 		x: 0, y: 0
 	});
 
-	background[6] = qj({
-		x: 600, y: 100,
-		w: 200, h: 75,
-		type: "image",
-		src: "images/iBed.png"
-	});
-
 	background[1] = qj({
 		style: {
 			backgroundColor: "rgb(236, 217, 58)"
@@ -98,8 +91,15 @@ qj.run("House", function() {
 		x: 200, y: 200
 	});
 
+	background[6] = qj({
+		x: 600, y: 100,
+		w: 200, h: 75,
+		type: "image",
+		src: "images/iBed.png"
+	});
+
 	tutorialHelper = qj({
-		html: '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Welcome to the HealThem Tutorial Level, ' + sessionStorage.getItem("name") + '!<br>Click on the white arrow on the bottom right to continue.',
+		html: '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Welcome to the HealThem Tutorial, ' + sessionStorage.getItem("name") + '!<br>Click on the white arrow on the bottom right to continue.',
 		w: 800, h: 100,
 		x: 0, y: 500,
 		style: {
