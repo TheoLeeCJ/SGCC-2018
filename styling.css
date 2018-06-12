@@ -24,3 +24,9 @@ body {
 	0% { opacity: 1; }
 	100% { opacity: 0; }
 }
+
+@keyframes triangle {
+	0% { top: 550px; }
+	50% { top: 560px; }
+	100% { top: 550px; }
+}
