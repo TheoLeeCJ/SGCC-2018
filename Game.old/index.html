@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HealThem</title>
+
+		<script>
+			// Sci-Fi Theme
+			sciFi = new Audio('others/sci-fi.mp3');
+			sciFi.addEventListener('ended', function () {
+				this.currentTime = 0;
+				this.play();
+			}, false);
+		</script>
+
+		<link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
+		<link href="styling.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/solid.css" integrity="sha384-Rw5qeepMFvJVEZdSo1nDQD5B6wX0m7c5Z/pLNvjkB14W6Yki1hKbSEQaX9ffUbWe" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/fontawesome.css" integrity="sha384-GVa9GOgVQgOk+TNYXu7S/InPTfSDTtBalSgkgqQ7sCik56N9ztlkoTr2f/T44oKV" crossorigin="anonymous">
+	</head>
+
+	<body>
+		<noscript style="color: white;">
+			Please turn on JavaScript for this video game to work.
+		</noscript>
+
+		<div id="Game">
+			<div id="StartScreen">
+				<img src="images/SGCC-Start-Screen.gif" style="position: static;" width="800" height="600" />
+				<div style="background-color: rgba(0, 0, 0, 0.7); border-radius: 10px; top: 175px; left: 225px; width: 350px; height: 250px;">
+					<div style="font-size: 60px; color: white; z-index: 2; top: 30px; left: 30px;">HealThem</div>
+					<div style="z-index: 2; top: 140px; left: 50px;">
+						<button class="button" onclick="sciFi.play(); StartGame();">Start Game</button>
+					</div>
+				</div>
+			</div>
+
+			<div id="EnterName" style="display: none;">
+				<div style="font-size: 36px; color: white; z-index: 2; top: 250px; left: 250px;">Enter your name:</div>
+				<form onsubmit="EnterName(event);" style="z-index: 2; top: 320px; left: 250px;">
+					<input class="text-input" id="EnterName-Name" style="top: 0px; left: 20px;" />
+					<button type="submit" class="button" style="top: 70px; left: 20px;">GO!</button>
+				</form>
+			</div>
+
+			<div id="Premise" style="display: none;">
+				<div id="Premise-1">
+					<img src="images/pangda.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						The year is 2100, AD. Science, Technology and Engineering have brought unto humans greater prosperity than ever before. Hover cars fill the roads.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('1', '2');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-2" style="display: none;">
+					<img src="images/pangda.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						But the cars sure don't seem to be hovering far off the ground. Why is that so?
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('2', '3');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-3" style="display: none;">
+					<img src="images/Fat guy exiting car.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						Because of the people inside them. Humans has been spoiled by technology, and are now fat and lazy. The rise of Consumerism hasn't helped too.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('3', '4');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-4" style="display: none;">
+					<img src="images/Sed boi.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						But you, yes you, <span style="display: inline-block; position: static;" class="PlayerName"></span>, are special. You want change. The spirit of the HealthKnight is burning in you.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Premise('4', '5');">Next ></button>
+					</div>
+				</div>
+
+				<div id="Premise-5" style="display: none;">
+					<img src="images/Happy boi.png" width="800" height="450" />
+					<div style="background-color: yellow; color: black; font-size: 24px; padding: 10px; top: 450px; width: 800px; height: 150px;">
+						You need to <b style="display: inline-block; position: static;">HealThem</b>.
+						<button style="bottom: 10px; right: 10px;" class="button" onclick="Tutorial(); sciFi.pause();">Play Game ></button>
+					</div>
+				</div>
+			</div>
+
+			<div id="Tutorial" style="display: none;">
+				<iframe style="overflow: hidden; border: 0;" src="game.html" width="800" height="600"></iframe>
+			</div>
+		</div>
+
+		<!--Scripts-->
+		<script src="startscreen.js"></script>
+	</body>
+</html>

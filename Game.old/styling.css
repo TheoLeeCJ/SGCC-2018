@@ -1,0 +1,120 @@
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: black;
+	height: 100vh;
+	margin: 0;
+}
+
+* {
+	font-family: "Fredoka One";
+	cursor: default;
+	outline: 0;
+	box-sizing: border-box;
+}
+
+#Game {
+	color: #fff;
+	position: relative;
+}
+
+#Game > * {
+	width: 800px; height: 600px;
+}
+
+#Game > * > * {
+	position: absolute;
+}
+
+#Game > * > * > * {
+	position: absolute;
+}
+
+#Game > * > * > * > * {
+	position: absolute;
+}
+
+.text-input {
+	background-color: white; color: black;
+	width: 250px;
+	border-radius: 5px;
+	padding: 10px;
+	font-size: 20px;
+	border: 0;
+}
+
+.button {
+	background-color: white; color: black;
+	width: 250px;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 10px;
+	font-size: 20px;
+	border: 0;
+}
+
+.button:hover {
+	background-color: grey;; color: black;
+	transition: 0.2s;
+}
+
+@keyframes triangle {
+	0% { top: 550px; }
+	50% { top: 560px; }
+	100% { top: 550px; }
+}
+
+@keyframes threeSidedThing {
+	0% { top: 250px; }
+	50% { top: 265px; }
+	100% { top: 250px; }
+}
+
+@keyframes turn {
+	0% { opacity: 0; }
+	50% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+@keyframes boiHurt {
+	0% { left: 490px; }
+	33% { left: 510px; }
+	66% { left: 490px; }
+	100% { left: 510px; }
+}
+
+@keyframes cardUsed {
+	0% { top: 475px; transform: scale(1); }
+	50% { top: 200px; transform: scale(1); }
+	100% { top: 200px; transform: scale(0); }
+}
+
+@keyframes enemyHurt {
+	0% { left: 90px; }
+	33% { left: 110px; }
+	66% { left: 90px; }
+	100% { left: 110px; }
+}
+
+@keyframes hpPlus {
+	0% { top: 350px; opacity: 0; }
+	50% { top: 330px; opacity: 1; }
+	100% { top: 310px; opacity: 0; }
+}
+
+@keyframes bar {
+	0% { top: -40px; }
+	49% { top: 70px; opacity: 1.0; }
+	50% { top: 70px; opacity: 0; }
+	59% { top: 70px; opacity: 0; }
+	60% { top: 70px; opacity: 1.0; }
+	69% { top: 70px; opacity: 1.0; }
+	70% { top: 70px; opacity: 0; }
+	79% { top: 70px; opacity: 0; }
+	80% { top: 70px; opacity: 1.0; }
+	89% { top: 70px; opacity: 1.0; }
+	90% { top: 70px; opacity: 0; }
+	99% { top: 70px; opacity: 0; }
+	100% { top: 70px; opacity: 1.0; }
+}
