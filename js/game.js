@@ -1,9 +1,11 @@
 var characters = [];
 var blocks = [];
 
-var movementEnabled = false,
+var movementEnabled = false, listeningForMovement = false,
 checkKeys = false,
 floorX = 0, floorY = 0,
+boiWalking = false,
+wasSpacePressed = false,
 previousKeyStrokes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 qj.run("Game", function() {
@@ -24,7 +26,7 @@ qj.run("Game", function() {
 	{
 		blocks[0] = qj({
 			x: 0, y: 15,
-			h: 140, w: 1000,
+			h: 140, w: 10000,
 			style: { backgroundColor: "grey" }
 		});
 
@@ -42,8 +44,22 @@ qj.run("Game", function() {
 
 		blocks[5] = qj({
 			x: -3, y: 0,
-			h: 20, w: 1000,
+			h: 20, w: 10000,
 			style: { backgroundColor: "#595959", border: "3px solid black" }
+		});
+
+		blocks[7] = qj({
+			x: 450, y: 40,
+			h: 110,
+			type: "image",
+			src: "img/furniture/tv.png"
+		});
+
+		blocks[8] = qj({
+			x: 1000, y: 45,
+			h: 115,
+			type: "image",
+			src: "img/doorway.png"
 		});
 
 		blocks[1] = qj({
@@ -54,10 +70,10 @@ qj.run("Game", function() {
 		});
 
 		blocks[2] = qj({
-			x: 300, y: 45,
+			x: 300, y: 47.5,
 			h: 115,
 			type: "image",
-			src: "img/doorway.png"
+			src: "img/door.png"
 		});
 
 		blocks[3] = qj({
@@ -88,12 +104,14 @@ qj.run("Game", function() {
 
 		tutorialTriangle.on("click", function() {
 			tutorialTriangle.hide();
-			movementEnabled = true;
+			movementEnabled = true; listeningForMovement = true;
 			tutorialHelper.html = '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Use W, A, S and D to move around.';
 		});
 	}
 	// End of helper
 }, function() {
+	wasSpacePressed++;
+
 	// Collisions with backgrounds + movement
 	if (movementEnabled) {
 		checkKeys = true;
@@ -128,15 +146,37 @@ qj.run("Game", function() {
 			}
 			else if (qj.keydown[65]) {
 				boiWalking = true; characters[0].x -= 5;
-				boi.src = boi.src.replace("_R", "_L");
+				characters[0].src = characters[0].src.replace("_R", "_L");
 				previousKeyStrokes.shift(); previousKeyStrokes.push(65);
 			}
 			else if (qj.keydown[68]) {
 				boiWalking = true; characters[0].x += 5;
-				boi.src = boi.src.replace("_L", "_R");
+				characters[0].src = characters[0].src.replace("_L", "_R");
 				previousKeyStrokes.shift(); previousKeyStrokes.push(68);
 			}
 			else { boiWalking = false; }
+
+			// Helper Helper
+			if ((listeningForMovement == true) && (boiWalking == true)) {
+				listeningForMovement = false;
+				setTimeout(function() {
+					movementEnabled = false;
+					tutorialHelper.html = "You can press the <span style='color: yellow;'>spacebar</span> or use the white, moving arrow at the bottom to skip or go thru certain steps.";
+					
+					tutorialTriangle.style.display = "block";
+					tutorialTriangle.off();
+					tutorialTriangle.on("click", function() {
+						tutorialHelper.html = "This is your <span style='color: yellow;'>HOUSE</span>. As the only person with the spirit of the HealthKnight, you need to convince your family members to get healthy.";
+						
+						tutorialTriangle.off();
+						tutorialTriangle.on("click", function() {
+							tutorialHelper.html = "Grandpa ought to be home at this time. Explore around your house and try looking for him.";
+							tutorialTriangle.hide();
+							movementEnabled = true;
+						});
+					});
+				}, 250);
+			}
 
 			// Move Screen I guess...
 			if ((characters[0].x + 110) > qj.width) {
@@ -159,6 +199,24 @@ qj.run("Game", function() {
 				for (i = 0; i < blocks.length; i++) { blocks[i].y += 5; }
 				characters[0].y += 5;
 			}
+		}
+	}
+
+	// Rooms
+	if (characters[0].collide(blocks[8])) {
+
+	}
+	
+	if (characters[0].collide(blocks[2])) {console.log("a");
+		tutorialHelper.html = "This door leads outside. Do you really want to leave your nice, comfortable house?";
+		tutorialTriangle.show();
+	}
+
+	// Keyboard
+	if (qj.keydown[32]) {
+		if (wasSpacePressed > 60) {
+			wasSpacePressed = 0;
+			tutorialTriangle.click();
 		}
 	}
 });

@@ -237,6 +237,11 @@ var qj;
 		qjObject.prototype.on = function (event, func) {
 			this.element.addEventListener(event, func);
 		};
+		// .click()
+		// Removes event listeners
+		qjObject.prototype.click = function () {
+			this.element.click();
+		};
 		// .off()
 		// Removes event listeners
 		qjObject.prototype.off = function () {
