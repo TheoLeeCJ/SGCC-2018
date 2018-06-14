@@ -1,5 +1,6 @@
 var characters = [];
 var blocks = [];
+var hitboxes = [];
 
 var movementEnabled = false, listeningForMovement = false,
 checkKeys = false,
@@ -17,7 +18,7 @@ qj.run("Game", function() {
 
 	characters[0] = qj({
 		x: 375, y: 250,
-		h: 100,
+		h: 100, w: 52,
 		type: "image",
 		src: "img/proto/Stand_L.png"
 	});
@@ -56,8 +57,8 @@ qj.run("Game", function() {
 		});
 
 		blocks[8] = qj({
-			x: 1000, y: 45,
-			h: 115,
+			x: 1000, y: 48,
+			h: 115, w: 73,
 			type: "image",
 			src: "img/doorway.png"
 		});
@@ -70,7 +71,7 @@ qj.run("Game", function() {
 		});
 
 		blocks[2] = qj({
-			x: 300, y: 47.5,
+			x: 300, y: 48,
 			h: 115,
 			type: "image",
 			src: "img/door.png"
@@ -84,11 +85,24 @@ qj.run("Game", function() {
 		});
 	}
 	// End of decorative stuff in apartment (mostly)
+	
+	// Hitboxes
+	{
+		hitboxes[0] = qj({
+			x: 1000, y: 48,
+			h: 130, w: 70
+		});
+		
+		hitboxes[1] = qj({
+			x: 300, y: 48,
+			h: 130, w: 70
+		});
+	}
 
 	// Helper
 	{
 		tutorialHelper = qj({
-			html: '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Welcome to the HealThem Tutorial!<br>Click on the white arrow on the bottom right to continue.',
+			html: '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Welcome to the HealThem Tutorial!<br>Press the <span style="color: yellow;">spacebar</span> to continue.',
 			w: 800, h: 100,
 			x: 0, y: 500,
 			style: { backdropFilter: "blur(2px)", backgroundColor: "rgba(0, 0, 0, 0.7)", color: "white", fontSize: "1.2rem", textAlign: "left", padding: "20px", display: "block" }
@@ -101,6 +115,8 @@ qj.run("Game", function() {
 			src: "img/triangle.png",
 			style: { animation: "triangle 1s infinite", cursor: "pointer" }
 		});
+
+		tutorialTriangle.element.setAttribute("onclick", "if (this.style.display !== 'none') { buttonSound.play(); }");
 
 		tutorialTriangle.on("click", function() {
 			tutorialTriangle.hide();
@@ -203,13 +219,38 @@ qj.run("Game", function() {
 	}
 
 	// Rooms
-	if (characters[0].collide(blocks[8])) {
-
+	if (characters[0].collide(hitboxes[0])) {
+		tutorialHelper.html = "This door leads to your Grandpa's room. Continue?";
+		tutorialTriangle.show();
 	}
 	
-	if (characters[0].collide(blocks[2])) {console.log("a");
+	if (characters[0].collide(hitboxes[1])) {console.log("a");
 		tutorialHelper.html = "This door leads outside. Do you really want to leave your nice, comfortable house?";
+		tutorialTriangle.off();
 		tutorialTriangle.show();
+		characters[0].y += 5;
+		movementEnabled = false;
+
+		tutorialTriangle.on("click", function() {
+			tutorialHelper.html = "...";
+			tutorialTriangle.off();
+
+			tutorialTriangle.on("click", function() {
+				tutorialHelper.html = "You do? Really?";
+				tutorialTriangle.off();
+
+				tutorialTriangle.on("click", function() {
+					tutorialHelper.html = "Nah, no you don't. :)";
+					tutorialTriangle.off();
+	
+					tutorialTriangle.on("click", function() {
+						tutorialHelper.html = "";
+						tutorialTriangle.hide();
+						movementEnabled = true;
+					});
+				});
+			});
+		});
 	}
 
 	// Keyboard

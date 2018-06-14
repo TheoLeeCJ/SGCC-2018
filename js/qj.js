@@ -255,14 +255,6 @@ var qj;
 		// .collide(qjObject obj)
 		// Returns whether or not this qjObject is colliding with another
 		qjObject.prototype.collide = function (obj) {
-			/*return ((this.x > obj.x &&
-							 this.x < obj.x + obj.w) ||
-							(this.x + this.w > obj.x &&
-							 this.x + this.w < obj.x + obj.w)) &&
-							((this.y > obj.y &&
-							 this.y < obj.y + obj.h) ||
-							(this.y + this.h > obj.y &&
-							 this.y + this.h < obj.y + obj.h));*/
 			// New code by Shuan
 			var foo1 = this;
 			var foo2 = obj;
