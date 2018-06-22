@@ -6,9 +6,11 @@
 		<script>
 			// Preload Audio
 			buttonSound = new Audio('music/button.mp3');
+			teleportSound = new Audio('music/teleport.mp3');
 		</script>
 
 		<link href="styling.css" rel="stylesheet" />
+		<script src="js/collections/enemies.js"></script>
 
 		<link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/solid.css" integrity="sha384-Rw5qeepMFvJVEZdSo1nDQD5B6wX0m7c5Z/pLNvjkB14W6Yki1hKbSEQaX9ffUbWe" crossorigin="anonymous">
@@ -20,15 +22,18 @@
 			Please turn on JavaScript for this video game to work.
 		</noscript>
 
-		<script src="js/qj.js"></script>
+		<script src="js/qj.min.js"></script>
 		<script src="js/startscreen.js"></script>
 		<script src="js/story.js"></script>
 		<script src="js/splashes.js"></script>
 		<script src="js/credits.js"></script>
 		<script src="js/game.js"></script>
+		<script src="js/grandpa-room.js"></script>
+		<script src="js/battle.js"></script>
 
 		<script>
-			qj.stage = "Game";
+			//qj.stage = "Game";
+			qj.stage = "Battle";
 		</script>
 	</body>
 </html>

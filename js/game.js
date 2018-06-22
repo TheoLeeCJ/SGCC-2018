@@ -1,12 +1,13 @@
 var characters = [];
 var blocks = [];
 var hitboxes = [];
+var whitestuff = "";
 
 var movementEnabled = false, listeningForMovement = false,
 checkKeys = false,
 floorX = 0, floorY = 0,
 boiWalking = false,
-wasSpacePressed = false,
+wasSpacePressed = 0, wasYesPressed = 0,
 previousKeyStrokes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 qj.run("Game", function() {
@@ -26,25 +27,25 @@ qj.run("Game", function() {
 	// Decorative stuff in apartment (mostly)
 	{
 		blocks[0] = qj({
-			x: 0, y: 15,
+			x: -5000, y: 15,
 			h: 140, w: 10000,
 			style: { backgroundColor: "grey" }
 		});
 
 		blocks[4] = qj({
-			x: -3, y: 470,
+			x: -5003, y: 470,
 			h: 20, w: 10000,
 			style: { backgroundColor: "#595959", border: "3px solid black" }
 		});
 
 		blocks[6] = qj({
-			x: -3, y: 490,
+			x: -5003, y: 490,
 			h: 200, w: 10000,
 			style: { backgroundColor: "black" }
 		});
 
 		blocks[5] = qj({
-			x: -3, y: 0,
+			x: -5003, y: 0,
 			h: 20, w: 10000,
 			style: { backgroundColor: "#595959", border: "3px solid black" }
 		});
@@ -97,6 +98,16 @@ qj.run("Game", function() {
 			x: 300, y: 48,
 			h: 130, w: 70
 		});
+		
+		hitboxes[2] = qj({
+			x: 2000, y: 0,
+			h: 600, w: 70
+		});
+		
+		hitboxes[3] = qj({
+			x: -2000, y: 0,
+			h: 600, w: 70
+		});
 	}
 
 	// Helper
@@ -123,10 +134,39 @@ qj.run("Game", function() {
 			movementEnabled = true; listeningForMovement = true;
 			tutorialHelper.html = '<i class="fa fa-info-circle" style="margin-right: 10px;"></i> Use W, A, S and D to move around.';
 		});
+
+		yes = qj({
+			text: "Yes (Y)",
+			y: 575, x: 325,
+			style: { cursor: "pointer", color: "white", textDecoration: "underline", fontSize: "1.2rem" },
+			hover: { color: "yellow" }
+		});
+
+		no = qj({
+			text: "No (N)",
+			y: 575, x: 400,
+			style: { cursor: "pointer", color: "white", textDecoration: "underline", fontSize: "1.2rem" },
+			hover: { color: "yellow" }
+		});
+
+		yes.hide(); no.hide();
 	}
 	// End of helper
+
+	// White thing
+	{
+		whitestuff = qj({
+			x: 0, y: 0,
+			h: 600, w: 800,
+			style: {
+				backgroundColor: "white",
+				display: "none"
+			}
+		});
+	}
+	// End of white thing
 }, function() {
-	wasSpacePressed++;
+	wasSpacePressed++; wasYesPressed++;
 
 	// Collisions with backgrounds + movement
 	if (movementEnabled) {
@@ -197,34 +237,45 @@ qj.run("Game", function() {
 			// Move Screen I guess...
 			if ((characters[0].x + 110) > qj.width) {
 				for (i = 0; i < blocks.length; i++) { blocks[i].x -= 5; }
+				for (i = 0; i < hitboxes.length; i++) { hitboxes[i].x -= 5; }
 				characters[0].x -= 5;
 				floorX -= 5;
 				floor.style.backgroundPosition = floorX + "px " + floorY + "px";
 			}
 			else if ((characters[0].x) < 60) {
 				for (i = 0; i < blocks.length; i++) { blocks[i].x += 5; }
+				for (i = 0; i < hitboxes.length; i++) { hitboxes[i].x += 5; }
 				characters[0].x += 5;
 				floorX += 5;
 				floor.style.backgroundPosition = floorX + "px " + floorY + "px";
 			}
 			else if ((characters[0].y + 110) > qj.height) {
 				for (i = 0; i < blocks.length; i++) { blocks[i].y -= 5; }
+				for (i = 0; i < hitboxes.length; i++) { hitboxes[i].y -= 5; }
 				characters[0].y -= 5;
 			}
 			else if ((characters[0].y) < 60) {
 				for (i = 0; i < blocks.length; i++) { blocks[i].y += 5; }
+				for (i = 0; i < hitboxes.length; i++) { hitboxes[i].y += 5; }
 				characters[0].y += 5;
 			}
 		}
 	}
 
-	// Rooms
+	// Grandpa's room
 	if (characters[0].collide(hitboxes[0])) {
 		tutorialHelper.html = "This door leads to your Grandpa's room. Continue?";
-		tutorialTriangle.show();
+		tutorialTriangle.off();
+		tutorialTriangle.hide();
+		movementEnabled = false;
+
+		yes.show(); no.show();
+		yes.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); qj.stage = "GrandpaRoom"; });
+		no.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); tutorialHelper.html = "Objective: Find Grandpa. (hint: he should be in Grandpa's Room)"; });
 	}
 	
-	if (characters[0].collide(hitboxes[1])) {console.log("a");
+	// Door to outside
+	if (characters[0].collide(hitboxes[1])) {
 		tutorialHelper.html = "This door leads outside. Do you really want to leave your nice, comfortable house?";
 		tutorialTriangle.off();
 		tutorialTriangle.show();
@@ -244,7 +295,39 @@ qj.run("Game", function() {
 					tutorialTriangle.off();
 	
 					tutorialTriangle.on("click", function() {
-						tutorialHelper.html = "";
+						tutorialHelper.html = "Objective: Find Grandpa.";
+						tutorialTriangle.hide();
+						movementEnabled = true;
+					});
+				});
+			});
+		});
+	}
+
+	// Walking for too long
+	if ((characters[0].collide(hitboxes[2])) || (characters[0].collide(hitboxes[3]))) {
+		tutorialHelper.html = "You've been walking down this corridor for such a long time.";
+		tutorialTriangle.off();
+		tutorialTriangle.show();
+		if (characters[0].collide(hitboxes[3])) characters[0].x += 5;
+		else if (characters[0].collide(hitboxes[2])) characters[0].x -= 5;
+		movementEnabled = false;
+
+		tutorialTriangle.on("click", function() {
+			tutorialHelper.html = "And yet...";
+			tutorialTriangle.off();
+			
+			tutorialTriangle.on("click", function() {
+				tutorialHelper.html = "You realise there's really no point trying to break out of this game's boundaries.";
+				tutorialTriangle.off();
+
+				tutorialTriangle.on("click", function() {
+					tutorialHelper.html = "And so, you decide that you ought to go back to where you began.";
+					tutorialTriangle.off();
+	
+					tutorialTriangle.on("click", function() {
+						tutorialHelper.html = "Objective: Find Grandpa.";
+						tutorialTriangle.off();
 						tutorialTriangle.hide();
 						movementEnabled = true;
 					});
@@ -258,6 +341,20 @@ qj.run("Game", function() {
 		if (wasSpacePressed > 60) {
 			wasSpacePressed = 0;
 			tutorialTriangle.click();
+		}
+	}
+
+	if (qj.keydown[89]) {
+		if (wasYesPressed > 60) {
+			wasYesPressed = 0;
+			yes.click();
+		}
+	}
+
+	if (qj.keydown[78]) {
+		if (wasYesPressed > 60) {
+			wasYesPressed = 0;
+			no.click();
 		}
 	}
 });

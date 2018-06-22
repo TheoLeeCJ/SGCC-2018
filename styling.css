@@ -25,6 +25,12 @@ body {
 	100% { opacity: 0; }
 }
 
+@keyframes fadeInOut {
+	0% { opacity: 0; }
+	50% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
 @keyframes triangle {
 	0% { top: 550px; }
 	50% { top: 560px; }
