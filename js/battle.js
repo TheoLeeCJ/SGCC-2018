@@ -1,5 +1,18 @@
 var lanes = [];
 var boundaries = [];
+var projectiles = [];
+var boundaries = [];
+var projectilesMoving = false, wasSpacePressed = 0;
+
+// TO-DO
+// Make projectile move for a while before projectile explanation shows (stop projectile when explanation shows)
+
+// Utilities
+{
+	function DisplayProjectiles() {
+		for (i = 0; i < projectiles.length; i++) { projectiles[i].show(); }
+	}
+}
 
 qj.run("Battle", function() {
 	var enemyInfo = enemiesInfo[sessionStorage.getItem("enemyId")];
@@ -53,19 +66,46 @@ qj.run("Battle", function() {
 		lanes[0] = qj({
 			w: 100, h: 290,
 			x: 253, y: 195,
-			style: { border: "3px solid black", backdropFilter: "blur(2px)", backgroundColor: "rgba(0, 0, 0, 0.5)" }
+			style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
 		});
 
 		lanes[1] = qj({
 			w: 100, h: 290,
 			x: 350, y: 195,
-			style: { border: "3px solid black", backdropFilter: "blur(2px)", backgroundColor: "rgba(0, 0, 0, 0.5)" }
+			style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
 		});
 
 		lanes[2] = qj({
 			w: 100, h: 290,
 			x: 447, y: 195,
-			style: { border: "3px solid black", backdropFilter: "blur(2px)", backgroundColor: "rgba(0, 0, 0, 0.5)" }
+			style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
+		});
+	}
+
+	// Projectiles
+	{
+		projectiles[0] = qj({
+			w: 36, h: 36,
+			type: "image",
+			src: "img/projectiles/hamburger.png",
+			x: 285, y: 300,
+			style: { display: "none" }
+		});
+
+		projectiles[1] = qj({
+			w: 36, h: 36,
+			type: "image",
+			src: "img/projectiles/hamburger.png",
+			x: 385, y: 300,
+			style: { display: "none" }
+		});
+
+		projectiles[2] = qj({
+			w: 36, h: 36,
+			type: "image",
+			src: "img/projectiles/hamburger.png",
+			x: 480, y: 300,
+			style: { display: "none" }
 		});
 	}
 
@@ -93,9 +133,61 @@ qj.run("Battle", function() {
 			style: { animation: "triangle 1s infinite", cursor: "pointer" }
 		});
 
+		tutorialTriangle.on("click", function() {
+			if (sessionStorage.getItem("showTutorial") == "true") {
+				tutorialTriangle.off();
+				tutorialHelper.html = "But how do you fight?";
+
+				tutorialTriangle.on("click", function() {
+					tutorialTriangle.off();
+					tutorialHelper.html = "Well, what better way to find out... than to actually fight?";
+
+					tutorialTriangle.on("click", function() {
+						tutorialHelper.html = "And so the fight begins... when you press the spacebar.";
+
+						tutorialTriangle.on("click", function() {
+							tutorialTriangle.off();
+							tutorialTriangle.hide();
+	
+							DisplayProjectiles();
+						});
+					});
+				});
+			}
+			else {
+				tutorialHelper.html = "And so the fight begins... when you press the spacebar.";
+
+				tutorialTriangle.on("click", function() {
+					tutorialTriangle.off();
+					tutorialTriangle.hide();
+
+					DisplayProjectiles();
+					projectilesMoving = true;
+				});
+			}
+		});
+
 		tutorialTriangle.element.setAttribute("onclick", "if (this.style.display !== 'none') { buttonSound.play(); }");
 	}
 	// End of helper
-}, function() {
 
+	if (sessionStorage.getItem("showTutorial") == "true") {
+		projectiles[4] = qj({
+			w: 800, h: 600,
+			type: "image",
+			x: 0, y: 0,
+			src: "img/projectiles/tutorial-overlay.png",
+			style: { display: "none", opacity: "0.7" }
+		});
+	}
+}, function() {
+	wasSpacePressed++;
+
+	// Keyboard
+	if (qj.keydown[32]) {
+		if (wasSpacePressed > 60) {
+			wasSpacePressed = 0;
+			tutorialTriangle.click();
+		}
+	}
 });
