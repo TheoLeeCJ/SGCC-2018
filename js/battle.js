@@ -172,12 +172,16 @@ qj.run("Battle", function() {
 	// End of helper
 
 	if (sessionStorage.getItem("showTutorial") == "true") {
-		projectiles[4] = qj({
+		projectileHelper[0] = qj({
 			w: 800, h: 600,
 			type: "image",
 			x: 0, y: 0,
 			src: "img/projectiles/tutorial-overlay.png",
 			style: { display: "none", opacity: "0.7" }
+		});
+
+		projectileHelper[1] = qj({
+			
 		});
 	}
 }, function() {
@@ -190,4 +194,8 @@ qj.run("Battle", function() {
 			tutorialTriangle.click();
 		}
 	}
+
+	if (qj.keydown[83]) {}
+
+	if (qj.keydown[68]) {}
 });
