@@ -2,7 +2,8 @@ var lanes = [];
 var boundaries = [];
 var projectiles = [];
 var boundaries = [];
-var projectilesMoving = false, wasSpacePressed = 0;
+var projectileHelper = [];
+var projectilesMoving = false, wasSpacePressed = 0, redirectSpacebar = "";
 
 // TO-DO
 // Make projectile move for a while before projectile explanation shows (stop projectile when explanation shows)
@@ -11,6 +12,15 @@ var projectilesMoving = false, wasSpacePressed = 0;
 {
 	function DisplayProjectiles() {
 		for (i = 0; i < projectiles.length; i++) { projectiles[i].show(); }
+		projectilesMoving = true;
+
+		if (sessionStorage.getItem("showTutorial") == "true") {
+			redirectSpacebar = "OK-1";
+			setTimeout(function() {
+				projectilesMoving = false;
+				for (i = 0; i < projectileHelper.length; i++) { projectileHelper[i].style.display = "block"; }
+			}, 500);
+		}
 	}
 }
 
@@ -88,7 +98,7 @@ qj.run("Battle", function() {
 			w: 36, h: 36,
 			type: "image",
 			src: "img/projectiles/hamburger.png",
-			x: 285, y: 300,
+			x: 285, y: 200,
 			style: { display: "none" }
 		});
 
@@ -96,7 +106,7 @@ qj.run("Battle", function() {
 			w: 36, h: 36,
 			type: "image",
 			src: "img/projectiles/hamburger.png",
-			x: 385, y: 300,
+			x: 385, y: 200,
 			style: { display: "none" }
 		});
 
@@ -104,9 +114,14 @@ qj.run("Battle", function() {
 			w: 36, h: 36,
 			type: "image",
 			src: "img/projectiles/hamburger.png",
-			x: 480, y: 300,
+			x: 480, y: 200,
 			style: { display: "none" }
 		});
+	}
+
+	// Boundaries
+	{
+
 	}
 
 	character = qj({
@@ -181,17 +196,33 @@ qj.run("Battle", function() {
 		});
 
 		projectileHelper[1] = qj({
-			
+			x: 400, y: 285,
+			style: { display: "none", color: "white", padding: "10px" },
+			html: `These are <span style='color: yellow;'>PROJKECTILES</span>. They will rain down on you. Use the S and D keys to move yourself between lanes to avoid them.
+			<div><span id="OK-1" style="float: right; text-decoration: underline; cursor: pointer;" onclick="projectileHelper[0].hide(); this.parentElement.parentElement.style.display = 'none'; projectilesMoving = true;">OK (spacebar)</span></div>`
 		});
 	}
 }, function() {
 	wasSpacePressed++;
 
+	// Projectile logic
+	if (projectilesMoving) {
+		for (i = 0; i < projectiles.length; i++) { projectiles[i].y += 3.5; }
+
+		for (i = 0; i < projectiles.length; i++) {
+			if (projectiles[i].collide()) {
+				
+			}
+		}
+	}
+
 	// Keyboard
 	if (qj.keydown[32]) {
 		if (wasSpacePressed > 60) {
 			wasSpacePressed = 0;
-			tutorialTriangle.click();
+
+			if (redirectSpacebar == "") { tutorialTriangle.click(); }
+			else { document.getElementById(redirectSpacebar).click(); redirectSpacebar = ""; }
 		}
 	}
 
