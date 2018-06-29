@@ -19,7 +19,7 @@ var projectilesMoving = false, wasSpacePressed = 0, redirectSpacebar = "";
 			setTimeout(function() {
 				projectilesMoving = false;
 				for (i = 0; i < projectileHelper.length; i++) { projectileHelper[i].style.display = "block"; }
-			}, 500);
+			}, 750);
 		}
 	}
 }
@@ -119,13 +119,8 @@ qj.run("Battle", function() {
 		});
 	}
 
-	// Boundaries
-	{
-
-	}
-
 	character = qj({
-		w: 50,
+		w: 50, h: 97,
 		x: 278, y: 380,
 		type: "image",
 		src: "img/proto/Stand_R.png"
@@ -207,12 +202,11 @@ qj.run("Battle", function() {
 
 	// Projectile logic
 	if (projectilesMoving) {
-		for (i = 0; i < projectiles.length; i++) { projectiles[i].y += 3.5; }
+		for (i = 0; i < projectiles.length; i++) { projectiles[i].y += 2.5; }
 
 		for (i = 0; i < projectiles.length; i++) {
-			if (projectiles[i].collide()) {
-				
-			}
+			if (projectiles[i].collide(character)) { projectiles[i].y = 200; }
+			if (projectiles[i].y > 450) { projectiles[i].y = 200; }
 		}
 	}
 
