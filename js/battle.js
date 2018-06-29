@@ -3,7 +3,7 @@ var boundaries = [];
 var projectiles = [];
 var boundaries = [];
 var projectileHelper = [];
-var projectilesMoving = false, wasSpacePressed = 0, redirectSpacebar = "";
+var projectilesMoving = false, wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 100, isMovingLanes = false, lane = 0;
 
 // TO-DO
 // Make projectile move for a while before projectile explanation shows (stop projectile when explanation shows)
@@ -22,6 +22,18 @@ var projectilesMoving = false, wasSpacePressed = 0, redirectSpacebar = "";
 			}, 750);
 		}
 	}
+
+	function UpdateStats(whoToDamage) {
+		if (whoToDamage == "character") {
+			// Play animation
+		}
+		else if (whoToDamage = "enemy") {
+			// Play animation
+		}
+
+		yourHP.text = health + " / 100";
+		enemyHP.text = enemyHealth + " / 100";
+	}
 }
 
 qj.run("Battle", function() {
@@ -31,13 +43,6 @@ qj.run("Battle", function() {
 		x: 0, y: 0,
 		w: 800, h: 600,
 		style: { backgroundColor: "white" }
-	});
-
-	enemy = qj({
-		w: 90,
-		x: 365, y: 10,
-		type: "image",
-		src: enemyInfo.image
 	});
 
 	// Stats
@@ -119,11 +124,19 @@ qj.run("Battle", function() {
 		});
 	}
 
+	enemy = qj({
+		w: 90,
+		x: 365, y: 10,
+		type: "image",
+		src: enemyInfo.image
+	});
+
 	character = qj({
 		w: 50, h: 97,
 		x: 278, y: 380,
 		type: "image",
-		src: "img/proto/Stand_R.png"
+		src: "img/proto/Stand_R.png",
+		style: { transitionTimingFunction: "ease", transition: "0.25s all" }
 	});
 
 	// Helper
@@ -205,7 +218,7 @@ qj.run("Battle", function() {
 		for (i = 0; i < projectiles.length; i++) { projectiles[i].y += 2.5; }
 
 		for (i = 0; i < projectiles.length; i++) {
-			if (projectiles[i].collide(character)) { projectiles[i].y = 200; }
+			if (projectiles[i].collide(character)) { yourHP -= 10; projectiles[i].y = 200; }
 			if (projectiles[i].y > 450) { projectiles[i].y = 200; }
 		}
 	}
@@ -220,7 +233,17 @@ qj.run("Battle", function() {
 		}
 	}
 
-	if (qj.keydown[83]) {}
+	if (qj.keydown[68] && !isMovingLanes) {
+		// Move left
+		isMovingLanes = true;
+		setTimeout(function() { isMovingLanes = false }, 250);
+		if (lane !== 2) { character.x += 97; lane++; }
+	}
 
-	if (qj.keydown[68]) {}
+	if (qj.keydown[65] && !isMovingLanes) {
+		// Move right
+		isMovingLanes = true;
+		setTimeout(function() { isMovingLanes = false }, 250);
+		if (lane !== 0) { character.x -= 97; lane--; }
+	}
 });
