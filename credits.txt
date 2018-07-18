@@ -9,8 +9,10 @@ POWERED BY QJ.JS
 Music from NewGrounds.com, by various creators
 'In the Hall of the Mountain King' by Edvard Grieg
 
--- Programming --
+-- Soundtrack Linking --
 Jonathan Koh Zhaoyun
+
+-- Programming --
 Theodore Lee
 
 -- Artwork --

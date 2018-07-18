@@ -8,5 +8,15 @@ var enemiesInfo = {
 				special: 0
 			}
 		]
+	},
+	sugarboi: {
+		image: "img/enemies/SUGARBOI.png",
+		initialText: "Sugar Boi sprinkles sugar on you! It feels disgusting. Time to fight this filthy beast.",
+		attacks: [
+			{
+				image: "sugar.png",
+				special: 0
+			}
+		]
 	}
 };

@@ -34,14 +34,20 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 
 		if (sessionStorage.getItem("showTutorial") == "true") {
 			redirectSpacebar = "OK-1";
+
 			setTimeout(function() {
 				projectilesMoving[0] = false;
 
 				projectileHelper[0].style.display = "block";
 				projectileHelper[1].style.display = "block";
-			}, 1000);
+			}, 1500);
 
 			setTimeout(function() {
+				projectilesMoving[2] = true;
+			}, 10000);
+
+			setTimeout(function() {
+				redirectSpacebar = "OK-2";
 				projectilesMoving[0] = false;
 
 				projectileHelper[2].style.display = "block";
@@ -271,7 +277,7 @@ qj.run("Battle", function() {
 			x: 400, y: 285,
 			style: { display: "none", color: "white", padding: "10px" },
 			html: `This is your attack timer. When it is full, you can press the <span style="color: yellow;">Z</span> key to launch an attack.
-			<div><span id="OK-2" style="float: right; text-decoration: underline; cursor: pointer;" onclick="projectileHelper[2].hide(); this.parentElement.parentElement.style.display = 'none'; projectilesMoving[0] = true;">OK (spacebar)</span></div>`
+			<div><span id="OK-2" style="float: right; text-decoration: underline; cursor: pointer;" onclick="projectileHelper[2].hide(); this.parentElement.parentElement.style.display = 'none'; projectilesMoving[0] = true; projectilesMoving[1] = true;">OK (spacebar)</span></div>`
 		});
 	}
 }, function() {
@@ -287,10 +293,10 @@ qj.run("Battle", function() {
 	// Projectile logic
 	for (i = 0; i < projectilesMoving.length; i++) {
 		if (projectilesMoving[i]) {
-			projectiles[i].y += 2.5;
+			projectiles[i].y += 2.25;
 	
-			if (projectiles[i].collide(character)) { health -= 10; UpdateStats("character"); projectiles[i].y = 150; }
-			if (projectiles[i].y > 450) { projectiles[i].y = 150; }
+			if (projectiles[i].collide(character)) { attackProgress -= 20; document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress); health -= 10; UpdateStats("character"); projectiles[i].y = 150; }
+			if (projectiles[i].y > 500) { projectiles[i].y = 150; }
 		}
 	}
 
