@@ -4,6 +4,8 @@ var projectiles = [];
 var boundaries = [];
 var projectileHelper = [];
 var covers = [];
+var projectileSpeed = [2.25, 2.25, 2.25];
+var attackUI = [];
 var loaderCode = `<div id="NextAttackTimer" class="radial-progress" data-progress="0">
 	<div class="circle">
 		<div class="mask full">
@@ -40,7 +42,7 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 
 				projectileHelper[0].style.display = "block";
 				projectileHelper[1].style.display = "block";
-			}, 1500);
+			}, 1250);
 
 			setTimeout(function() {
 				projectilesMoving[2] = true;
@@ -136,7 +138,7 @@ qj.run("Battle", function() {
 		});
 
 		covers[1] = qj({
-			w: 2, h: 50,
+			w: 60, h: 50,
 			x: 250, y: 485,
 			style: { backgroundColor: "white" }
 		});
@@ -154,7 +156,7 @@ qj.run("Battle", function() {
 				<div style="padding-left: 10px;">
 					<div style="font-size: 1.2rem;">Your HP</div>
 					<div style="font-size: 1.2rem; margin-top: 65px;">Enemy's HP</div>
-					<div style="font-size: 1.2rem; margin-top: 65px;">Next Attack:</div>
+					<div style="font-size: 1.2rem; margin-top: 65px;">Next Action:</div>
 				</div>
 			`
 		});
@@ -187,11 +189,11 @@ qj.run("Battle", function() {
 	});
 
 	character = qj({
-		w: 50, h: 97,
-		x: 278, y: 380,
+		w: 71, h: 50,
+		x: 265, y: 380,
 		type: "image",
 		src: "img/proto/Stand_R.png",
-		style: { transitionTimingFunction: "ease", transition: "0.25s all" }
+		style: { transitionTimingFunction: "ease", transition: "0.25s all", objectFit: "cover", objectPosition: "50% 0" }
 	});
 
 	// Helper
@@ -249,6 +251,76 @@ qj.run("Battle", function() {
 	}
 	// End of helper
 
+	// Choose Attack UI
+	{
+		attackUI[0] = qj({
+			w: 800, h: 600,
+			x: 0, y: 0,
+			style: { opacity: "0.8", backgroundColor: "rgb(0, 0, 0)" }
+		});
+
+		attackUI[1] = qj({
+			w: 800,
+			x: 0, y: 15,
+			text: "Choose Attack",
+			style: { fontSize: "48px", color: "white", textAlign: "center" }
+		});
+
+		attackUI[2] = qj({
+			h: 250,
+			x: 100, y: 85,
+			type: "image",
+			src: "img/attacks/Card_SayNoToConk.png"
+		});
+
+		attackUI[3] = qj({
+			h: 250,
+			x: 310, y: 85,
+			type: "image",
+			src: "img/attacks/Card_EatYourVeggies.png"
+		});
+
+		if (sessionStorage.getItem("unlockedAttacks") > 0) { src = "img/attacks/Card_Checkup.png"; }
+		else { src = "img/attacks/Card_Locked.png" }
+
+		attackUI[4] = qj({
+			h: 250,
+			x: 520, y: 85,
+			type: "image",
+			src: src
+		});
+
+		if (sessionStorage.getItem("unlockedAttacks") > 1) { src = "img/attacks/Card_Exercise.png"; }
+		else { src = "img/attacks/Card_Locked.png" }
+
+		attackUI[5] = qj({
+			h: 250,
+			x: 100, y: 350,
+			type: "image",
+			src: src
+		});
+
+		if (sessionStorage.getItem("unlockedAttacks") > 2) { src = "img/attacks/Card_LessOil.png"; }
+		else { src = "img/attacks/Card_Locked.png" }
+
+		attackUI[6] = qj({
+			h: 250,
+			x: 310, y: 350,
+			type: "image",
+			src: src
+		});
+
+		if (sessionStorage.getItem("unlockedAttacks") > 1) { src = "img/attacks/Card_Research.png"; }
+		else { src = "img/attacks/Card_Locked.png" }
+
+		attackUI[7] = qj({
+			h: 250,
+			x: 520, y: 350,
+			type: "image",
+			src: src
+		});
+	}
+
 	if (sessionStorage.getItem("showTutorial") == "true") {
 		projectileHelper[0] = qj({
 			w: 800, h: 600,
@@ -290,10 +362,15 @@ qj.run("Battle", function() {
 		document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress);
 	}
 
+	// Vary projectile speeds
+	if (sessionStorage.getItem("showTutorial") !== "true") {
+		// Randomise projectile speeds
+	}
+
 	// Projectile logic
 	for (i = 0; i < projectilesMoving.length; i++) {
 		if (projectilesMoving[i]) {
-			projectiles[i].y += 2.25;
+			projectiles[i].y += projectileSpeed[i];
 	
 			if (projectiles[i].collide(character)) { attackProgress -= 20; document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress); health -= 10; UpdateStats("character"); projectiles[i].y = 150; }
 			if (projectiles[i].y > 500) { projectiles[i].y = 150; }
@@ -308,6 +385,12 @@ qj.run("Battle", function() {
 			if (redirectSpacebar == "") { tutorialTriangle.click(); }
 			else { document.getElementById(redirectSpacebar).click(); redirectSpacebar = ""; }
 		}
+	}
+
+	if (qj.keydown[90] && (attackProgress > 99)) {
+		projectilesMoving[0] = false; projectilesMoving[1] = false; projectilesMoving[2] = false;
+
+
 	}
 
 	if (qj.keydown[68] && !isMovingLanes) {
