@@ -22,7 +22,7 @@ var loaderCode = `<div id="NextAttackTimer" class="radial-progress" data-progres
 		</div>
 	</div>
 </div>`;
-var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 100, isMovingLanes = false, lane = 0;
+var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 200, isMovingLanes = false, lane = 0;
 
 // TO-DO
 // ...
@@ -58,17 +58,24 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 		}
 	}
 
-	function UpdateStats(whoToDamage) {
-		if (whoToDamage == "character") {
-			character.style.animation = "damaged 0.5s infinite";
-			setTimeout(function () { character.style.animation = ""; }, 500);
-		}
-		else if (whoToDamage = "enemy") {
-			// Play animation
+	function ShowAttackUI() { for(i = 0; i < attackUI.length; i++) { attackUI[i].show(); } }
+
+	function HideAttackUI() { for(i = 0; i < attackUI.length; i++) { attackUI[i].hide(); } }
+
+	function UpdateStats(whoToDamage, action = "damage") {
+		if (action == "damage") {
+			if (whoToDamage == "character") {
+				character.style.animation = "damaged 0.5s infinite";
+				setTimeout(function () { character.style.animation = ""; }, 500);
+			}
+			else if (whoToDamage = "enemy") {
+				enemy.style.animation = "damaged 0.5s infinite";
+				setTimeout(function () { enemy.style.animation = ""; }, 500);
+			}
 		}
 
 		yourHP.text = health + " / 100";
-		enemyHP.text = enemyHealth + " / 100";
+		enemyHP.text = enemyHealth + " / 200";
 	}
 }
 
@@ -144,6 +151,34 @@ qj.run("Battle", function() {
 		});
 	}
 
+	// Coke, Broccoli
+	{
+		coke = qj({
+			w: 32, h: 79,
+			type: "image",
+			src: "img/attacks/conk.png"
+		});
+
+		coke.hide();
+
+		broc = qj({
+			w: 60, h: 60,
+			x: 275, y: 300,
+			type: "image",
+			src: "img/attacks/broc.png"
+		});
+
+		broc.hide();
+
+		hpUp = qj({
+			x: 265, y: 440,
+			text: "HP UP!",
+			style: { color: "green", fontSize: "24px" }
+		});
+
+		hpUp.hide();
+	}
+
 	// Stats
 	{
 		statsBackground = qj({
@@ -182,7 +217,7 @@ qj.run("Battle", function() {
 	}
 
 	enemy = qj({
-		w: 90,
+		w: 90, h: 180,
 		x: 365, y: 10,
 		type: "image",
 		src: enemyInfo.image
@@ -261,65 +296,143 @@ qj.run("Battle", function() {
 
 		attackUI[1] = qj({
 			w: 800,
-			x: 0, y: 15,
+			x: 0, y: 5,
 			text: "Choose Attack",
 			style: { fontSize: "48px", color: "white", textAlign: "center" }
 		});
 
 		attackUI[2] = qj({
 			h: 250,
-			x: 100, y: 85,
+			x: 100, y: 75,
 			type: "image",
-			src: "img/attacks/Card_SayNoToConk.png"
+			src: "img/attacks/Card_SayNoToConk.png",
+			hover: { border: "3px solid yellow", cursor: "pointer" }
+		});
+
+		attackUI[2].on("click", function() {
+			HideAttackUI();
+			
+			// Execute Attack
+			setTimeout(function() {
+				enemyHealth -= 20;
+
+				coke.show();
+				coke.style.animation = "conk 1.5s forwards";
+
+				setTimeout(function() {
+					coke.hide();
+					coke.style.animation = "";
+
+					UpdateStats("enemy");
+				}, 1500);
+			}, 500);
 		});
 
 		attackUI[3] = qj({
 			h: 250,
-			x: 310, y: 85,
+			x: 310, y: 75,
 			type: "image",
-			src: "img/attacks/Card_EatYourVeggies.png"
+			src: "img/attacks/Card_EatYourVeggies.png",
+			hover: { border: "3px solid yellow", cursor: "pointer" }
 		});
 
-		if (sessionStorage.getItem("unlockedAttacks") > 0) { src = "img/attacks/Card_Checkup.png"; }
-		else { src = "img/attacks/Card_Locked.png" }
+		attackUI[3].on("click", function() {
+			HideAttackUI();
+
+			// Execute Attack
+			setTimeout(function() {
+				health += 10;
+
+				broc.show();
+				broc.style.animation = "broc 1.5s forwards";
+
+				setTimeout(function() {
+					broc.hide();
+					broc.style.animation = "";
+
+					hpUp.show();
+					hpUp.style.animation = "hpUp 1s forwards";
+
+					setTimeout(function() {
+						hpUp.hide();
+						hpUp.style.animation = "";
+					}, 1000);
+
+					UpdateStats("character", "");
+				}, 1500);
+			}, 500);
+		});
 
 		attackUI[4] = qj({
 			h: 250,
-			x: 520, y: 85,
+			x: 520, y: 75,
 			type: "image",
-			src: src
+			src: "img/attacks/Card_Locked.png",
+			hover: { border: "3px solid yellow", cursor: "pointer" }
 		});
 
-		if (sessionStorage.getItem("unlockedAttacks") > 1) { src = "img/attacks/Card_Exercise.png"; }
-		else { src = "img/attacks/Card_Locked.png" }
+		if (sessionStorage.getItem("unlockedAttacks") > 0) {
+			attackUI[4].src = "img/attacks/Card_Checkup.png";
+			attackUI[4].on("click", function() {
+				HideAttackUI();
+				
+				// Execute Attack
+			});
+		}
 
 		attackUI[5] = qj({
 			h: 250,
-			x: 100, y: 350,
+			x: 100, y: 340,
 			type: "image",
-			src: src
+			src: "img/attacks/Card_Locked.png",
+			hover: { border: "3px solid yellow", cursor: "pointer" }
 		});
 
-		if (sessionStorage.getItem("unlockedAttacks") > 2) { src = "img/attacks/Card_LessOil.png"; }
-		else { src = "img/attacks/Card_Locked.png" }
+		if (sessionStorage.getItem("unlockedAttacks") > 1) {
+			attackUI[5].src = "img/attacks/Card_Exercise.png";
+			attackUI[5].on("click", function() {
+				HideAttackUI();
+				
+				// Execute Attack
+			});
+		}
 
 		attackUI[6] = qj({
 			h: 250,
-			x: 310, y: 350,
+			x: 310, y: 340,
 			type: "image",
-			src: src
+			src: "img/attacks/Card_Locked.png",
+			hover: { border: "3px solid yellow", cursor: "pointer" }
 		});
 
-		if (sessionStorage.getItem("unlockedAttacks") > 1) { src = "img/attacks/Card_Research.png"; }
-		else { src = "img/attacks/Card_Locked.png" }
+		if (sessionStorage.getItem("unlockedAttacks") > 2) {
+			attackUI[6].src = "img/attacks/Card_LessOil.png";
+			attackUI[6].on("click", function() {
+				HideAttackUI();
+				
+				// Execute Attack
+			});
+		}
 
 		attackUI[7] = qj({
 			h: 250,
-			x: 520, y: 350,
+			x: 520, y: 340,
 			type: "image",
-			src: src
+			src: "img/attacks/Card_Locked.png",
+			hover: { border: "3px solid yellow", cursor: "pointer" }
 		});
+
+		if (sessionStorage.getItem("unlockedAttacks") > 3) {
+			attackUI[7].src = "img/attacks/Card_Research.png";
+			attackUI[7].on("click", function() {
+				HideAttackUI();
+				
+				// Execute Attack
+			});
+		}
 	}
+
+	HideAttackUI();
 
 	if (sessionStorage.getItem("showTutorial") == "true") {
 		projectileHelper[0] = qj({
@@ -389,21 +502,20 @@ qj.run("Battle", function() {
 
 	if (qj.keydown[90] && (attackProgress > 99)) {
 		projectilesMoving[0] = false; projectilesMoving[1] = false; projectilesMoving[2] = false;
-
-
+		ShowAttackUI();
 	}
 
 	if (qj.keydown[68] && !isMovingLanes) {
 		// Move left
 		isMovingLanes = true;
 		setTimeout(function() { isMovingLanes = false }, 250);
-		if (lane !== 2) { character.x += 97; lane++; }
+		if (lane !== 2) { character.x += 97; lane++; hpUp.x += 97; broc.x += 97; }
 	}
 
 	if (qj.keydown[65] && !isMovingLanes) {
 		// Move right
 		isMovingLanes = true;
 		setTimeout(function() { isMovingLanes = false }, 250);
-		if (lane !== 0) { character.x -= 97; lane--; }
+		if (lane !== 0) { character.x -= 97; lane--; hpUp.x -= 97; broc.x -= 97; }
 	}
 });
