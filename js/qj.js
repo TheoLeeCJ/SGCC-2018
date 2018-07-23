@@ -204,6 +204,7 @@ var qj;
 			// TODO: set default value of certain styles, eg center for verticalAlign
 
 			// 1807 Bugfix
+			console.log(currentStage);
 			qj.stages[currentStage].objects.push(this);
 		}
 		// .show() and .hide()

@@ -86,7 +86,7 @@ var attackTimer = 0, enemyInfo = null, attackProgress = 100, a, projectilesMovin
 			continueButton.show(); continueButton.text = "Try Again";
 
 			continueButton.on("click", function() {
-				delete qj.stages["Battle"];
+				//delete qj.stages["Battle"];
 				InitBattle();
 				projectileSpeed = [2.25, 2.25, 2.25];
 				health = 100;
@@ -102,14 +102,14 @@ var attackTimer = 0, enemyInfo = null, attackProgress = 100, a, projectilesMovin
 
 			continueButton.on("click", function() {
 				if (sessionStorage.getItem("enemyId") == "megacorp") {
-					delete qj.stages["Battle"];
-					InitBattle();
+					//delete qj.stages["Battle"];
+					//InitBattle();
 					enemyHealth = 100;
 					qj.stage = "GrandpaOK";
 				}
 				else {
-					delete qj.stages["Battle"];
-					InitBattle();
+					//delete qj.stages["Battle"];
+					//InitBattle();
 					enemyHealth = 100;
 					qj.stage = "GrandpaOK";
 				}
