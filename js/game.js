@@ -264,14 +264,24 @@ qj.run("Game", function() {
 
 	// Grandpa's room
 	if (characters[0].collide(hitboxes[0])) {
-		tutorialHelper.html = "This door leads to your Grandpa's room. Continue?";
-		tutorialTriangle.off();
-		tutorialTriangle.hide();
-		movementEnabled = false;
+		if (sessionStorage.getItem("unlockedAttacks") > 0) {
+			tutorialHelper.html = "You've been here already.";
+			characters[0].y = 190;
 
-		yes.show(); no.show();
-		yes.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); qj.stage = "GrandpaRoom"; });
-		no.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); tutorialHelper.html = "Objective: Find Grandpa. (hint: he should be in Grandpa's Room)"; });
+			setTimeout(function() {
+				tutorialHelper.html = "HINT: You need to leave the house through the main door.";
+			});
+		}
+		else {
+			tutorialHelper.html = "This door leads to your Grandpa's room. Continue?";
+			tutorialTriangle.off();
+			tutorialTriangle.hide();
+			movementEnabled = false;
+
+			yes.show(); no.show();
+			yes.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); qj.stage = "GrandpaRoom"; });
+			no.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); tutorialHelper.html = "Objective: Find Grandpa. (hint: he should be in Grandpa's Room)"; });
+		}
 	}
 	
 	// Door to outside

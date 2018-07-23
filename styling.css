@@ -29,6 +29,20 @@ body {
 	100% { transform: translateX(0); }
 }
 
+@keyframes blinkBlackGreen {
+	0% { background-color: black; }
+	10% { background-color: green; }
+	20% { background-color: black; }
+	30% { background-color: green; }
+	40% { background-color: black; }
+	50% { background-color: green; }
+	60% { background-color: black; }
+	70% { background-color: green; }
+	8% { background-color: black; }
+	90% { background-color: green; }
+	100% { background-color: black; }
+}
+
 @keyframes broc {
 	0% { transform: translateY(-15px); opacity: 1; }
 	20% { transform: translateY(-5px); opacity: 1; }

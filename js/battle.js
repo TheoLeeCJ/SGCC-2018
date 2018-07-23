@@ -22,7 +22,7 @@ var loaderCode = `<div id="NextAttackTimer" class="radial-progress" data-progres
 		</div>
 	</div>
 </div>`;
-var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 200, isMovingLanes = false, lane = 0;
+var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 110, isMovingLanes = false, lane = 0;
 
 // TO-DO
 // ...
@@ -74,448 +74,505 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 			}
 		}
 
+
+		if (health < 1) {
+			projectilesMoving[0] = false; projectilesMoving[1] = false; projectilesMoving[2] = false;
+
+			darkener.show(); darkener.text = "You Died...";
+			continueButton.show(); continueButton.text = "Try Again";
+
+			continueButton.on("click", function() {
+				delete qj.stages["Battle"];
+				InitBattle();
+				health = 100;
+				qj.stage = "Battle";
+			});
+		}
+	
+		if (enemyHealth < 1) {
+			projectilesMoving[0] = false; projectilesMoving[1] = false; projectilesMoving[2] = false;
+
+			darkener.show(); darkener.text = "You Won!";
+			continueButton.show(); continueButton.text = "Continue";
+
+			continueButton.on("click", function() {
+				sessionStorage.setItem("grandpaCutscene", "show");
+
+				delete qj.stages["Battle"];
+				InitBattle();
+				enemyHealth = 100;
+				qj.stage = "GrandpaOK";
+			});
+		}
+
 		yourHP.text = health + " / 100";
-		enemyHP.text = enemyHealth + " / 200";
+		enemyHP.text = enemyHealth + " / 110";
+
+		attackProgress = 1;
+		projectilesMoving[0] = true; projectilesMoving[1] = true; projectilesMoving[2] = true;
 	}
 }
 
-qj.run("Battle", function() {
-	var enemyInfo = enemiesInfo[sessionStorage.getItem("enemyId")];
+function InitBattle() {
+	projectileSpeed = [2.25, 2.25, 2.25];
+	attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 110, isMovingLanes = false, lane = 0;
 
-	floor = qj({
-		x: 0, y: 0,
-		w: 800, h: 600,
-		style: { backgroundColor: "white" }
-	});
+	qj.run("Battle", function() {
+		var enemyInfo = enemiesInfo[sessionStorage.getItem("enemyId")];
 
-	// Lanes
-	{
-		lanes[0] = qj({
-			w: 100, h: 290,
-			x: 253, y: 195,
-			style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
-		});
-
-		lanes[1] = qj({
-			w: 100, h: 290,
-			x: 350, y: 195,
-			style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
-		});
-
-		lanes[2] = qj({
-			w: 100, h: 290,
-			x: 447, y: 195,
-			style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
-		});
-	}
-
-	// Projectiles
-	{
-		projectiles[0] = qj({
-			w: 36, h: 36,
-			type: "image",
-			src: "img/projectiles/hamburger.png",
-			x: 285, y: 150,
-			style: { display: "none" }
-		});
-
-		projectiles[1] = qj({
-			w: 36, h: 36,
-			type: "image",
-			src: "img/projectiles/hamburger.png",
-			x: 385, y: 150,
-			style: { display: "none" }
-		});
-
-		projectiles[2] = qj({
-			w: 36, h: 36,
-			type: "image",
-			src: "img/projectiles/hamburger.png",
-			x: 480, y: 150,
-			style: { display: "none" }
-		});
-	}
-
-	// Covers
-	{
-		covers[0] = qj({
-			w: 300, h: 50,
-			x: 250, y: 145,
-			style: { backgroundColor: "black" }
-		});
-
-		covers[1] = qj({
-			w: 60, h: 50,
-			x: 250, y: 485,
+		floor = qj({
+			x: 0, y: 0,
+			w: 800, h: 600,
 			style: { backgroundColor: "white" }
 		});
-	}
 
-	// Coke, Broccoli
-	{
-		coke = qj({
-			w: 32, h: 79,
+		// Lanes
+		{
+			lanes[0] = qj({
+				w: 100, h: 290,
+				x: 253, y: 195,
+				style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
+			});
+
+			lanes[1] = qj({
+				w: 100, h: 290,
+				x: 350, y: 195,
+				style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
+			});
+
+			lanes[2] = qj({
+				w: 100, h: 290,
+				x: 447, y: 195,
+				style: { border: "3px solid black", backgroundColor: "rgba(0, 0, 0, 0.3)" }
+			});
+		}
+
+		// Projectiles
+		{
+			projectiles[0] = qj({
+				w: 36, h: 36,
+				type: "image",
+				src: "img/projectiles/hamburger.png",
+				x: 285, y: 150,
+				style: { display: "none" }
+			});
+
+			projectiles[1] = qj({
+				w: 36, h: 36,
+				type: "image",
+				src: "img/projectiles/hamburger.png",
+				x: 385, y: 150,
+				style: { display: "none" }
+			});
+
+			projectiles[2] = qj({
+				w: 36, h: 36,
+				type: "image",
+				src: "img/projectiles/hamburger.png",
+				x: 480, y: 150,
+				style: { display: "none" }
+			});
+		}
+
+		// Covers
+		{
+			covers[0] = qj({
+				w: 300, h: 50,
+				x: 250, y: 145,
+				style: { backgroundColor: "black" }
+			});
+
+			covers[1] = qj({
+				w: 60, h: 50,
+				x: 250, y: 485,
+				style: { backgroundColor: "white" }
+			});
+		}
+
+		// Coke, Broccoli
+		{
+			coke = qj({
+				w: 32, h: 79,
+				type: "image",
+				src: "img/attacks/conk.png"
+			});
+
+			coke.hide();
+
+			broc = qj({
+				w: 60, h: 60,
+				x: 275, y: 300,
+				type: "image",
+				src: "img/attacks/broc.png"
+			});
+
+			broc.hide();
+
+			hpUp = qj({
+				x: 265, y: 440,
+				text: "HP UP!",
+				style: { color: "green", fontSize: "24px" }
+			});
+
+			hpUp.hide();
+		}
+
+		// Stats
+		{
+			statsBackground = qj({
+				w: 200, h: 480,
+				x: 20, y: 10,
+				style: { border: "5px solid black", backgroundColor: "yellow", display: "block" },
+				html: `
+					<div style="font-size: 2rem; margin-top: 10px; text-align: center;">STATS</div>
+					<hr style="border: 2.5px solid black">
+					<div style="padding-left: 10px;">
+						<div style="font-size: 1.2rem;">Your HP</div>
+						<div style="font-size: 1.2rem; margin-top: 65px;">Enemy's HP</div>
+						<div style="font-size: 1.2rem; margin-top: 65px;">Next Action:</div>
+					</div>
+				`
+			});
+
+			yourHP = qj({
+				w: 180, h: 30,
+				x: 30, y: 115,
+				style: { backgroundColor: "darkgreen", color: "white", padding: "2.5px" },
+				text: "100 / 100"
+			});
+
+			enemyHP = qj({
+				w: 180, h: 30,
+				x: 30, y: 205,
+				style: { backgroundColor: "red", color: "white", padding: "2.5px" },
+				text: "100 / 100"
+			});
+
+			a = qj({
+				x: 10, y: 250,
+				html: loaderCode
+			});
+		}
+
+		enemy = qj({
+			w: 90, h: 180,
+			x: 365, y: 10,
 			type: "image",
-			src: "img/attacks/conk.png"
+			src: enemyInfo.image
 		});
 
-		coke.hide();
-
-		broc = qj({
-			w: 60, h: 60,
-			x: 275, y: 300,
+		character = qj({
+			w: 71, h: 50,
+			x: 265, y: 380,
 			type: "image",
-			src: "img/attacks/broc.png"
+			src: "img/proto/Stand_R.png",
+			style: { transitionTimingFunction: "ease", transition: "0.25s all", objectFit: "cover", objectPosition: "50% 0" }
 		});
 
-		broc.hide();
+		// Helper
+		{
+			tutorialHelper = qj({
+				html: enemyInfo.initialText,
+				w: 800, h: 100,
+				x: 0, y: 500,
+				style: { backdropFilter: "blur(2px)", backgroundColor: "rgba(0, 0, 0, 0.7)", color: "white", fontSize: "1.2rem", textAlign: "left", padding: "20px", display: "block" }
+			});
 
-		hpUp = qj({
-			x: 265, y: 440,
-			text: "HP UP!",
-			style: { color: "green", fontSize: "24px" }
-		});
+			tutorialTriangle = qj({
+				w: 25, h: 25,
+				x: 750, y: 550,
+				type: "image",
+				src: "img/triangle.png",
+				style: { animation: "triangle 1s infinite", cursor: "pointer" }
+			});
 
-		hpUp.hide();
-	}
-
-	// Stats
-	{
-		statsBackground = qj({
-			w: 200, h: 480,
-			x: 20, y: 10,
-			style: { border: "5px solid black", backgroundColor: "yellow", display: "block" },
-			html: `
-				<div style="font-size: 2rem; margin-top: 10px; text-align: center;">STATS</div>
-				<hr style="border: 2.5px solid black">
-				<div style="padding-left: 10px;">
-					<div style="font-size: 1.2rem;">Your HP</div>
-					<div style="font-size: 1.2rem; margin-top: 65px;">Enemy's HP</div>
-					<div style="font-size: 1.2rem; margin-top: 65px;">Next Action:</div>
-				</div>
-			`
-		});
-
-		yourHP = qj({
-			w: 180, h: 30,
-			x: 30, y: 115,
-			style: { backgroundColor: "darkgreen", color: "white", padding: "2.5px" },
-			text: "100 / 100"
-		});
-
-		enemyHP = qj({
-			w: 180, h: 30,
-			x: 30, y: 205,
-			style: { backgroundColor: "red", color: "white", padding: "2.5px" },
-			text: "100 / 100"
-		});
-
-		a = qj({
-			x: 10, y: 250,
-			html: loaderCode
-		});
-	}
-
-	enemy = qj({
-		w: 90, h: 180,
-		x: 365, y: 10,
-		type: "image",
-		src: enemyInfo.image
-	});
-
-	character = qj({
-		w: 71, h: 50,
-		x: 265, y: 380,
-		type: "image",
-		src: "img/proto/Stand_R.png",
-		style: { transitionTimingFunction: "ease", transition: "0.25s all", objectFit: "cover", objectPosition: "50% 0" }
-	});
-
-	// Helper
-	{
-		tutorialHelper = qj({
-			html: enemyInfo.initialText,
-			w: 800, h: 100,
-			x: 0, y: 500,
-			style: { backdropFilter: "blur(2px)", backgroundColor: "rgba(0, 0, 0, 0.7)", color: "white", fontSize: "1.2rem", textAlign: "left", padding: "20px", display: "block" }
-		});
-
-		tutorialTriangle = qj({
-			w: 25, h: 25,
-			x: 750, y: 550,
-			type: "image",
-			src: "img/triangle.png",
-			style: { animation: "triangle 1s infinite", cursor: "pointer" }
-		});
-
-		tutorialTriangle.on("click", function() {
-			if (sessionStorage.getItem("showTutorial") == "true") {
-				tutorialTriangle.off();
-				tutorialHelper.html = "But how do you fight?";
-
-				tutorialTriangle.on("click", function() {
+			tutorialTriangle.on("click", function() {
+				if (sessionStorage.getItem("showTutorial") == "true") {
 					tutorialTriangle.off();
-					tutorialHelper.html = "Well, what better way to find out... than to actually fight?";
+					tutorialHelper.html = "But how do you fight?";
 
 					tutorialTriangle.on("click", function() {
-						tutorialHelper.html = "And so the fight begins... when you press the spacebar.";
+						tutorialTriangle.off();
+						tutorialHelper.html = "Well, what better way to find out... than to actually fight?";
 
 						tutorialTriangle.on("click", function() {
-							tutorialTriangle.off();
-							tutorialTriangle.hide();
-	
-							DisplayProjectiles();
+							tutorialHelper.html = "And so the fight begins... when you press the spacebar.";
+
+							tutorialTriangle.on("click", function() {
+								tutorialTriangle.off();
+								tutorialTriangle.hide();
+		
+								DisplayProjectiles();
+							});
 						});
 					});
-				});
-			}
-			else {
-				tutorialHelper.html = "And so the fight begins... when you press the spacebar.";
+				}
+				else {
+					tutorialHelper.html = "And so the fight begins... when you press the spacebar.";
 
-				tutorialTriangle.on("click", function() {
-					tutorialTriangle.off();
-					tutorialTriangle.hide();
+					tutorialTriangle.on("click", function() {
+						tutorialTriangle.off();
+						tutorialTriangle.hide();
 
-					DisplayProjectiles();
-					projectilesMoving = true;
-				});
-			}
-		});
+						DisplayProjectiles();
+						projectilesMoving = true;
+					});
+				}
+			});
 
-		tutorialTriangle.element.setAttribute("onclick", "if (this.style.display !== 'none') { buttonSound.play(); }");
-	}
-	// End of helper
+			tutorialTriangle.element.setAttribute("onclick", "if (this.style.display !== 'none') { buttonSound.play(); }");
+		}
+		// End of helper
 
-	// Choose Attack UI
-	{
-		attackUI[0] = qj({
-			w: 800, h: 600,
-			x: 0, y: 0,
-			style: { opacity: "0.8", backgroundColor: "rgb(0, 0, 0)" }
-		});
+		// Choose Attack UI
+		{
+			attackUI[0] = qj({
+				w: 800, h: 600,
+				x: 0, y: 0,
+				style: { opacity: "0.8", backgroundColor: "rgb(0, 0, 0)" }
+			});
 
-		attackUI[1] = qj({
-			w: 800,
-			x: 0, y: 5,
-			text: "Choose Attack",
-			style: { fontSize: "48px", color: "white", textAlign: "center" }
-		});
+			attackUI[1] = qj({
+				w: 800,
+				x: 0, y: 5,
+				text: "Choose Attack",
+				style: { fontSize: "48px", color: "white", textAlign: "center" }
+			});
 
-		attackUI[2] = qj({
-			h: 250,
-			x: 100, y: 75,
-			type: "image",
-			src: "img/attacks/Card_SayNoToConk.png",
-			hover: { border: "3px solid yellow", cursor: "pointer" }
-		});
+			attackUI[2] = qj({
+				h: 250,
+				x: 100, y: 75,
+				type: "image",
+				src: "img/attacks/Card_SayNoToConk.png",
+				hover: { border: "3px solid yellow", cursor: "pointer" }
+			});
 
-		attackUI[2].on("click", function() {
-			HideAttackUI();
-			
-			// Execute Attack
-			setTimeout(function() {
-				enemyHealth -= 20;
-
-				coke.show();
-				coke.style.animation = "conk 1.5s forwards";
-
+			attackUI[2].on("click", function() {
+				HideAttackUI();
+				
+				// Execute Attack
 				setTimeout(function() {
-					coke.hide();
-					coke.style.animation = "";
+					enemyHealth -= 20;
 
-					UpdateStats("enemy");
-				}, 1500);
-			}, 500);
-		});
-
-		attackUI[3] = qj({
-			h: 250,
-			x: 310, y: 75,
-			type: "image",
-			src: "img/attacks/Card_EatYourVeggies.png",
-			hover: { border: "3px solid yellow", cursor: "pointer" }
-		});
-
-		attackUI[3].on("click", function() {
-			HideAttackUI();
-
-			// Execute Attack
-			setTimeout(function() {
-				health += 10;
-
-				broc.show();
-				broc.style.animation = "broc 1.5s forwards";
-
-				setTimeout(function() {
-					broc.hide();
-					broc.style.animation = "";
-
-					hpUp.show();
-					hpUp.style.animation = "hpUp 1s forwards";
+					coke.show();
+					coke.style.animation = "conk 1.5s forwards";
 
 					setTimeout(function() {
-						hpUp.hide();
-						hpUp.style.animation = "";
-					}, 1000);
+						coke.hide();
+						coke.style.animation = "";
 
-					UpdateStats("character", "");
-				}, 1500);
-			}, 500);
-		});
-
-		attackUI[4] = qj({
-			h: 250,
-			x: 520, y: 75,
-			type: "image",
-			src: "img/attacks/Card_Locked.png",
-			hover: { border: "3px solid yellow", cursor: "pointer" }
-		});
-
-		if (sessionStorage.getItem("unlockedAttacks") > 0) {
-			attackUI[4].src = "img/attacks/Card_Checkup.png";
-			attackUI[4].on("click", function() {
-				HideAttackUI();
-				
-				// Execute Attack
+						UpdateStats("enemy");
+					}, 1500);
+				}, 500);
 			});
+
+			attackUI[3] = qj({
+				h: 250,
+				x: 310, y: 75,
+				type: "image",
+				src: "img/attacks/Card_EatYourVeggies.png",
+				hover: { border: "3px solid yellow", cursor: "pointer" }
+			});
+
+			attackUI[3].on("click", function() {
+				HideAttackUI();
+
+				// Execute Attack
+				setTimeout(function() {
+					health += 10;
+
+					broc.show();
+					broc.style.animation = "broc 1.5s forwards";
+
+					setTimeout(function() {
+						broc.hide();
+						broc.style.animation = "";
+
+						hpUp.show();
+						hpUp.style.animation = "hpUp 1s forwards";
+
+						setTimeout(function() {
+							hpUp.hide();
+							hpUp.style.animation = "";
+						}, 1000);
+
+						UpdateStats("character", "");
+					}, 1500);
+				}, 500);
+			});
+
+			attackUI[4] = qj({
+				h: 250,
+				x: 520, y: 75,
+				type: "image",
+				src: "img/attacks/Card_Locked.png",
+				hover: { border: "3px solid yellow", cursor: "pointer" }
+			});
+
+			if (sessionStorage.getItem("unlockedAttacks") > 0) {
+				attackUI[4].src = "img/attacks/Card_Checkup.png";
+				attackUI[4].on("click", function() {
+					HideAttackUI();
+					
+					// Execute Attack
+				});
+			}
+
+			attackUI[5] = qj({
+				h: 250,
+				x: 100, y: 340,
+				type: "image",
+				src: "img/attacks/Card_Locked.png",
+				hover: { border: "3px solid yellow", cursor: "pointer" }
+			});
+
+			if (sessionStorage.getItem("unlockedAttacks") > 1) {
+				attackUI[5].src = "img/attacks/Card_Exercise.png";
+				attackUI[5].on("click", function() {
+					HideAttackUI();
+					
+					// Execute Attack
+				});
+			}
+
+			attackUI[6] = qj({
+				h: 250,
+				x: 310, y: 340,
+				type: "image",
+				src: "img/attacks/Card_Locked.png",
+				hover: { border: "3px solid yellow", cursor: "pointer" }
+			});
+
+			if (sessionStorage.getItem("unlockedAttacks") > 2) {
+				attackUI[6].src = "img/attacks/Card_LessOil.png";
+				attackUI[6].on("click", function() {
+					HideAttackUI();
+					
+					// Execute Attack
+				});
+			}
+
+			attackUI[7] = qj({
+				h: 250,
+				x: 520, y: 340,
+				type: "image",
+				src: "img/attacks/Card_Locked.png",
+				hover: { border: "3px solid yellow", cursor: "pointer" }
+			});
+
+			if (sessionStorage.getItem("unlockedAttacks") > 3) {
+				attackUI[7].src = "img/attacks/Card_Research.png";
+				attackUI[7].on("click", function() {
+					HideAttackUI();
+					
+					// Execute Attack
+				});
+			}
 		}
 
-		attackUI[5] = qj({
-			h: 250,
-			x: 100, y: 340,
-			type: "image",
-			src: "img/attacks/Card_Locked.png",
-			hover: { border: "3px solid yellow", cursor: "pointer" }
-		});
+		HideAttackUI();
 
-		if (sessionStorage.getItem("unlockedAttacks") > 1) {
-			attackUI[5].src = "img/attacks/Card_Exercise.png";
-			attackUI[5].on("click", function() {
-				HideAttackUI();
-				
-				// Execute Attack
-			});
-		}
-
-		attackUI[6] = qj({
-			h: 250,
-			x: 310, y: 340,
-			type: "image",
-			src: "img/attacks/Card_Locked.png",
-			hover: { border: "3px solid yellow", cursor: "pointer" }
-		});
-
-		if (sessionStorage.getItem("unlockedAttacks") > 2) {
-			attackUI[6].src = "img/attacks/Card_LessOil.png";
-			attackUI[6].on("click", function() {
-				HideAttackUI();
-				
-				// Execute Attack
-			});
-		}
-
-		attackUI[7] = qj({
-			h: 250,
-			x: 520, y: 340,
-			type: "image",
-			src: "img/attacks/Card_Locked.png",
-			hover: { border: "3px solid yellow", cursor: "pointer" }
-		});
-
-		if (sessionStorage.getItem("unlockedAttacks") > 3) {
-			attackUI[7].src = "img/attacks/Card_Research.png";
-			attackUI[7].on("click", function() {
-				HideAttackUI();
-				
-				// Execute Attack
-			});
-		}
-	}
-
-	HideAttackUI();
-
-	if (sessionStorage.getItem("showTutorial") == "true") {
-		projectileHelper[0] = qj({
+		// Darken Screen
+		darkener = qj({
 			w: 800, h: 600,
-			type: "image",
 			x: 0, y: 0,
-			src: "img/projectiles/tutorial-overlay.png",
-			style: { display: "none", opacity: "0.7" }
+			text: "You Won!",
+			style: { backgroundColor: "rgba(0, 0, 0, 0.7)", color: "white", fontSize: "48px", display: "none", justifyItems: "middle" }
 		});
 
-		projectileHelper[1] = qj({
-			x: 400, y: 285,
-			style: { display: "none", color: "white", padding: "10px" },
-			html: `These are <span style='color: yellow;'>PROJKECTILES</span>. They will rain down on you. Use the S and D keys to move yourself between lanes to avoid them.
-			<div><span id="OK-1" style="float: right; text-decoration: underline; cursor: pointer;" onclick="projectileHelper[0].hide(); this.parentElement.parentElement.style.display = 'none'; projectilesMoving[0] = true; redirectSpacebar = 'OK-2';">OK (spacebar)</span></div>`
+		continueButton = qj({
+			w: 250,
+			x: 275, y: 340,
+			text: "Continue",
+			style: { display: "none", fontSize: "1.25rem", color: "black", backgroundColor: "white", padding: "10px", borderRadius: "5px", cursor: "pointer" },
+			hover: { transition: "0.25s", backgroundColor: "grey" }
 		});
 
-		projectileHelper[2] = qj({
-			w: 800, h: 600,
-			type: "image",
-			x: 0, y: 0,
-			src: "img/projectiles/attack-overlay.png",
-			style: { display: "none", opacity: "0.7" }
-		});
+		if (sessionStorage.getItem("showTutorial") == "true") {
+			projectileHelper[0] = qj({
+				w: 800, h: 600,
+				type: "image",
+				x: 0, y: 0,
+				src: "img/projectiles/tutorial-overlay.png",
+				style: { display: "none", opacity: "0.7" }
+			});
 
-		projectileHelper[3] = qj({
-			x: 400, y: 285,
-			style: { display: "none", color: "white", padding: "10px" },
-			html: `This is your attack timer. When it is full, you can press the <span style="color: yellow;">Z</span> key to launch an attack.
-			<div><span id="OK-2" style="float: right; text-decoration: underline; cursor: pointer;" onclick="projectileHelper[2].hide(); this.parentElement.parentElement.style.display = 'none'; projectilesMoving[0] = true; projectilesMoving[1] = true;">OK (spacebar)</span></div>`
-		});
-	}
-}, function() {
-	wasSpacePressed++;
-	if (!(attackProgress > 99)) attackTimer++;
+			projectileHelper[1] = qj({
+				x: 400, y: 285,
+				style: { display: "none", color: "white", padding: "10px" },
+				html: `These are <span style='color: yellow;'>PROJKECTILES</span>. They will rain down on you. Use the S and D keys to move yourself between lanes to avoid them.
+				<div><span id="OK-1" style="float: right; text-decoration: underline; cursor: pointer;" onclick="projectileHelper[0].hide(); this.parentElement.parentElement.style.display = 'none'; projectilesMoving[0] = true; redirectSpacebar = 'OK-2';">OK (spacebar)</span></div>`
+			});
 
-	// Next Attack
-	if (((attackTimer % 5) == 0) && !(attackProgress > 99)) {
-		attackProgress++;
-		document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress);
-	}
+			projectileHelper[2] = qj({
+				w: 800, h: 600,
+				type: "image",
+				x: 0, y: 0,
+				src: "img/projectiles/attack-overlay.png",
+				style: { display: "none", opacity: "0.7" }
+			});
 
-	// Vary projectile speeds
-	if (sessionStorage.getItem("showTutorial") !== "true") {
-		// Randomise projectile speeds
-	}
-
-	// Projectile logic
-	for (i = 0; i < projectilesMoving.length; i++) {
-		if (projectilesMoving[i]) {
-			projectiles[i].y += projectileSpeed[i];
-	
-			if (projectiles[i].collide(character)) { attackProgress -= 20; document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress); health -= 10; UpdateStats("character"); projectiles[i].y = 150; }
-			if (projectiles[i].y > 500) { projectiles[i].y = 150; }
+			projectileHelper[3] = qj({
+				x: 400, y: 285,
+				style: { display: "none", color: "white", padding: "10px" },
+				html: `This is your attack timer. When it is full, you can press the <span style="color: yellow;">Z</span> key to launch an attack.
+				<div><span id="OK-2" style="float: right; text-decoration: underline; cursor: pointer;" onclick="projectileHelper[2].hide(); this.parentElement.parentElement.style.display = 'none'; projectilesMoving[0] = true; projectilesMoving[1] = true;">OK (spacebar)</span></div>`
+			});
 		}
-	}
+	}, function() {
+		wasSpacePressed++;
+		if (!(attackProgress > 99)) attackTimer++;
 
-	// Keyboard
-	if (qj.keydown[32]) {
-		if (wasSpacePressed > 60) {
-			wasSpacePressed = 0;
-
-			if (redirectSpacebar == "") { tutorialTriangle.click(); }
-			else { document.getElementById(redirectSpacebar).click(); redirectSpacebar = ""; }
+		// Next Attack
+		if (((attackTimer % 5) == 0) && !(attackProgress > 99)) {
+			attackProgress++;
+			document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress);
 		}
-	}
 
-	if (qj.keydown[90] && (attackProgress > 99)) {
-		projectilesMoving[0] = false; projectilesMoving[1] = false; projectilesMoving[2] = false;
-		ShowAttackUI();
-	}
+		// Vary projectile speeds
+		if (sessionStorage.getItem("showTutorial") !== "true") {
+			// Randomise projectile speeds
+		}
 
-	if (qj.keydown[68] && !isMovingLanes) {
-		// Move left
-		isMovingLanes = true;
-		setTimeout(function() { isMovingLanes = false }, 250);
-		if (lane !== 2) { character.x += 97; lane++; hpUp.x += 97; broc.x += 97; }
-	}
+		// Projectile logic
+		for (i = 0; i < projectilesMoving.length; i++) {
+			if (projectilesMoving[i]) {
+				projectiles[i].y += projectileSpeed[i];
+		
+				if (projectiles[i].collide(character)) { attackProgress -= 20; document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress); health -= 10; UpdateStats("character"); projectiles[i].y = 150; }
+				if (projectiles[i].y > 500) { projectiles[i].y = 150; }
+			}
+		}
 
-	if (qj.keydown[65] && !isMovingLanes) {
-		// Move right
-		isMovingLanes = true;
-		setTimeout(function() { isMovingLanes = false }, 250);
-		if (lane !== 0) { character.x -= 97; lane--; hpUp.x -= 97; broc.x -= 97; }
-	}
-});
+		// Keyboard
+		if (qj.keydown[32]) {
+			if (wasSpacePressed > 60) {
+				wasSpacePressed = 0;
+
+				if (redirectSpacebar == "") { tutorialTriangle.click(); }
+				else { document.getElementById(redirectSpacebar).click(); redirectSpacebar = ""; }
+			}
+		}
+
+		if (qj.keydown[90] && (attackProgress > 99)) {
+			projectilesMoving[0] = false; projectilesMoving[1] = false; projectilesMoving[2] = false;
+			ShowAttackUI();
+		}
+
+		if (qj.keydown[68] && !isMovingLanes) {
+			// Move left
+			isMovingLanes = true;
+			setTimeout(function() { isMovingLanes = false }, 250);
+			if (lane !== 2) { character.x += 97; lane++; hpUp.x += 97; broc.x += 97; }
+		}
+
+		if (qj.keydown[65] && !isMovingLanes) {
+			// Move right
+			isMovingLanes = true;
+			setTimeout(function() { isMovingLanes = false }, 250);
+			if (lane !== 0) { character.x -= 97; lane--; hpUp.x -= 97; broc.x -= 97; }
+		}
+	});
+}
+
+InitBattle();

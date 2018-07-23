@@ -4,6 +4,7 @@ POWERED BY QJ.JS
 'Ray Gun' from SoundBible.com
 'Robotic Bleep' from SoundBible.com
 'Punch' from SoundBible.com
+'Appear' from SoundBible.com
 
 -- Music --
 Music from NewGrounds.com, by various creators
