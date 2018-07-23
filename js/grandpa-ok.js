@@ -19,7 +19,7 @@ qj.run("GrandpaOK", function() {
 		x: 0, y: 0,
 		w: 800, h: 600,
 		type: "image",
-		src: "img/art/oldmangetup.png"
+		src: "img/art/oldmangotup.png"
 	});
 
 	pixels[0] = qj({
@@ -58,10 +58,12 @@ qj.run("GrandpaOK", function() {
 				tutorialTriangle.off();
 				tutorialTriangle.on("click", function() {
 					tutorialHelper.html = "(He's getting up...)";
+					pixels[0].hide();
 					
 					tutorialTriangle.off();
 					tutorialTriangle.on("click", function() {
 						tutorialHelper.html = "<span style='color: yellow;'>Grandpa:</span><br>Thanks, my dear grandchild.";
+						pixels[1].hide();
 						
 						tutorialTriangle.off();
 						tutorialTriangle.on("click", function() {
@@ -121,7 +123,7 @@ qj.run("GrandpaOK", function() {
 
 		buttonThing = qj({
 			w: 250,
-			x: 275, y: 450,
+			x: 275, y: 500,
 			text: "Continue",
 			style: { display: "none", fontSize: "1.25rem", color: "black", backgroundColor: "white", padding: "10px", borderRadius: "5px", cursor: "pointer" },
 			hover: { transition: "0.25s", backgroundColor: "grey" }

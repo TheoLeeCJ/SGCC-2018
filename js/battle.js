@@ -22,7 +22,7 @@ var loaderCode = `<div id="NextAttackTimer" class="radial-progress" data-progres
 		</div>
 	</div>
 </div>`;
-var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 110, isMovingLanes = false, lane = 0;
+var attackTimer = 0, enemyInfo = null, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 110, isMovingLanes = false, lane = 0;
 
 // TO-DO
 // ...
@@ -56,6 +56,11 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 				projectileHelper[3].style.display = "block";
 			}, 8000);
 		}
+		else {
+			projectilesMoving[0] = true;
+			setTimeout(function() { projectilesMoving[1] = true; }, 1000);
+			setTimeout(function() { projectilesMoving[2] = true; }, 2000);
+		}
 	}
 
 	function ShowAttackUI() { for(i = 0; i < attackUI.length; i++) { attackUI[i].show(); } }
@@ -74,7 +79,6 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 			}
 		}
 
-
 		if (health < 1) {
 			projectilesMoving[0] = false; projectilesMoving[1] = false; projectilesMoving[2] = false;
 
@@ -84,6 +88,7 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 			continueButton.on("click", function() {
 				delete qj.stages["Battle"];
 				InitBattle();
+				projectileSpeed = [2.25, 2.25, 2.25];
 				health = 100;
 				qj.stage = "Battle";
 			});
@@ -96,12 +101,18 @@ var attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false,
 			continueButton.show(); continueButton.text = "Continue";
 
 			continueButton.on("click", function() {
-				sessionStorage.setItem("grandpaCutscene", "show");
-
-				delete qj.stages["Battle"];
-				InitBattle();
-				enemyHealth = 100;
-				qj.stage = "GrandpaOK";
+				if (sessionStorage.getItem("enemyId") == "megacorp") {
+					delete qj.stages["Battle"];
+					InitBattle();
+					enemyHealth = 100;
+					qj.stage = "GrandpaOK";
+				}
+				else {
+					delete qj.stages["Battle"];
+					InitBattle();
+					enemyHealth = 100;
+					qj.stage = "GrandpaOK";
+				}
 			});
 		}
 
@@ -118,7 +129,7 @@ function InitBattle() {
 	attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 110, isMovingLanes = false, lane = 0;
 
 	qj.run("Battle", function() {
-		var enemyInfo = enemiesInfo[sessionStorage.getItem("enemyId")];
+		enemyInfo = enemiesInfo[sessionStorage.getItem("enemyId")];
 
 		floor = qj({
 			x: 0, y: 0,
@@ -255,8 +266,8 @@ function InitBattle() {
 		}
 
 		enemy = qj({
-			w: 90, h: 180,
-			x: 365, y: 10,
+			w: enemyInfo.w, h: enemyInfo.h,
+			x: 400 - (enemyInfo.w / 2), y: 10,
 			type: "image",
 			src: enemyInfo.image
 		});
@@ -315,7 +326,6 @@ function InitBattle() {
 						tutorialTriangle.hide();
 
 						DisplayProjectiles();
-						projectilesMoving = true;
 					});
 				}
 			});
@@ -529,9 +539,32 @@ function InitBattle() {
 			document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress);
 		}
 
-		// Vary projectile speeds
+		// Randomly expand projectiles
 		if (sessionStorage.getItem("showTutorial") !== "true") {
-			// Randomise projectile speeds
+			if (Random(0, 200) == 5) {
+				var a = Random(0, 2);
+				var originalX = projectiles[a].x;
+				var originalY = projectiles[a].y;
+				var originalW = projectiles[a].w;
+				var originalH = projectiles[a].h;
+
+				projectiles[a].style.transition = "0.25s";
+				projectiles[a].w *= 2;
+				projectiles[a].h *= 2;
+				projectiles[a].x -= projectiles[a].w / 4;
+				projectiles[a].y -= projectiles[a].h / 4;
+				projectiles[a].style.opacity = "0.25";
+
+				setTimeout(function() {
+					projectiles[a].x = originalX;
+					projectiles[a].h = originalH;
+					projectiles[a].w = originalW;
+					projectiles[a].y = originalY;
+					projectiles[a].style.transition = "0s";
+					projectiles[a].y = 150;
+					projectiles[a].style.opacity = "1.0";
+				}, 250);
+			}
 		}
 
 		// Projectile logic
@@ -540,7 +573,10 @@ function InitBattle() {
 				projectiles[i].y += projectileSpeed[i];
 		
 				if (projectiles[i].collide(character)) { attackProgress -= 20; document.getElementById("NextAttackTimer").setAttribute("data-progress", attackProgress); health -= 10; UpdateStats("character"); projectiles[i].y = 150; }
-				if (projectiles[i].y > 500) { projectiles[i].y = 150; }
+				if (projectiles[i].y > 500) {
+					projectiles[i].src = enemyInfo.attacks[Random(0, enemyInfo.attacks.length - 1)].image;
+					projectiles[i].y = 150;
+				}
 			}
 		}
 

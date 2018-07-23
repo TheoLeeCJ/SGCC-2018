@@ -21,7 +21,7 @@ qj.run("Game", function() {
 		x: 375, y: 250,
 		h: 100, w: 52,
 		type: "image",
-		src: "img/proto/Stand_L.png"
+		src: "img/proto/boy_walking_L.gif"
 	});
 
 	// Decorative stuff in apartment (mostly)
@@ -202,12 +202,12 @@ qj.run("Game", function() {
 			}
 			else if (qj.keydown[65]) {
 				boiWalking = true; characters[0].x -= 5;
-				characters[0].src = characters[0].src.replace("_R", "_L");
+				if (characters[0].src.includes("_R")) characters[0].src = characters[0].src.replace("_R", "_L");
 				previousKeyStrokes.shift(); previousKeyStrokes.push(65);
 			}
 			else if (qj.keydown[68]) {
 				boiWalking = true; characters[0].x += 5;
-				characters[0].src = characters[0].src.replace("_L", "_R");
+				if (characters[0].src.includes("_L")) characters[0].src = characters[0].src.replace("_L", "_R");
 				previousKeyStrokes.shift(); previousKeyStrokes.push(68);
 			}
 			else { boiWalking = false; }
@@ -270,7 +270,7 @@ qj.run("Game", function() {
 
 			setTimeout(function() {
 				tutorialHelper.html = "HINT: You need to leave the house through the main door.";
-			});
+			}, 2000);
 		}
 		else {
 			tutorialHelper.html = "This door leads to your Grandpa's room. Continue?";
@@ -286,32 +286,44 @@ qj.run("Game", function() {
 	
 	// Door to outside
 	if (characters[0].collide(hitboxes[1])) {
-		tutorialHelper.html = "This door leads outside. Do you really want to leave your nice, comfortable house?";
-		tutorialTriangle.off();
-		tutorialTriangle.show();
-		characters[0].y += 5;
-		movementEnabled = false;
-
-		tutorialTriangle.on("click", function() {
-			tutorialHelper.html = "...";
+		if (sessionStorage.getItem("unlockedAttacks") > 0) {
+			tutorialHelper.html = "This door leads outside. Continue?";
 			tutorialTriangle.off();
+			tutorialTriangle.hide();
+			movementEnabled = false;
+
+			yes.show(); no.show();
+			yes.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); qj.stage = "Outside"; });
+			no.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); tutorialHelper.html = "Objective: Go outside."; });
+		}
+		else {
+			tutorialHelper.html = "This door leads outside. Do you really want to leave your nice, comfortable house?";
+			tutorialTriangle.off();
+			tutorialTriangle.show();
+			characters[0].y += 5;
+			movementEnabled = false;
 
 			tutorialTriangle.on("click", function() {
-				tutorialHelper.html = "You do? Really?";
+				tutorialHelper.html = "...";
 				tutorialTriangle.off();
 
 				tutorialTriangle.on("click", function() {
-					tutorialHelper.html = "Nah, no you don't. :)";
+					tutorialHelper.html = "You do? Really?";
 					tutorialTriangle.off();
-	
+
 					tutorialTriangle.on("click", function() {
-						tutorialHelper.html = "Objective: Find Grandpa.";
-						tutorialTriangle.hide();
-						movementEnabled = true;
+						tutorialHelper.html = "Nah, no you don't. :)";
+						tutorialTriangle.off();
+		
+						tutorialTriangle.on("click", function() {
+							tutorialHelper.html = "Objective: Find Grandpa.";
+							tutorialTriangle.hide();
+							movementEnabled = true;
+						});
 					});
 				});
 			});
-		});
+		}
 	}
 
 	// Walking for too long

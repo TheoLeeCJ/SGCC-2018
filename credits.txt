@@ -5,6 +5,7 @@ POWERED BY QJ.JS
 'Robotic Bleep' from SoundBible.com
 'Punch' from SoundBible.com
 'Appear' from SoundBible.com
+'Big switch' from Jojikiba on YouTube
 
 -- Music --
 Music from NewGrounds.com, by various creators
@@ -31,4 +32,4 @@ HWA CHONG INSTITUTION
 
 
 -- HEALTHEM --
-for SGCC 2018
+for sgcc 2018
