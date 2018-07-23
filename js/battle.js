@@ -205,7 +205,7 @@ function InitBattle() {
 			coke = qj({
 				w: 32, h: 79,
 				type: "image",
-				src: "img/attacks/conk.png"
+				src: "img/attacks/Conk.png"
 			});
 
 			coke.hide();

@@ -10,6 +10,15 @@ boiWalking = false,
 wasSpacePressed = 0, wasYesPressed = 0,
 previousKeyStrokes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+function ResetGameVars() {
+	movementEnabled = false, listeningForMovement = false,
+	checkKeys = false,
+	floorX = 0, floorY = 0,
+	boiWalking = false,
+	wasSpacePressed = 0, wasYesPressed = 0,
+	previousKeyStrokes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+}
+
 qj.run("Game", function() {
 	floor = qj({
 		x: 0, y: 0,
@@ -279,7 +288,7 @@ qj.run("Game", function() {
 			movementEnabled = false;
 
 			yes.show(); no.show();
-			yes.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); qj.stage = "GrandpaRoom"; });
+			yes.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); tutorialTriangle.show(); qj.stage = "GrandpaRoom"; });
 			no.on("click", function() { characters[0].y = 190; movementEnabled = true; yes.off(); no.off(); yes.hide(); no.hide(); tutorialHelper.html = "Objective: Find Grandpa. (hint: he should be in Grandpa's Room)"; });
 		}
 	}
@@ -287,8 +296,8 @@ qj.run("Game", function() {
 	// Door to outside
 	if (characters[0].collide(hitboxes[1])) {
 		if (sessionStorage.getItem("unlockedAttacks") > 0) {
-			tutorialHelper.html = "This door leads outside. Continue?";
-			tutorialTriangle.off();
+			document.getElementById("qj_26").innerHTML = "This door leads outside. Continue?";
+			//tutorialTriangle.off();
 			tutorialTriangle.hide();
 			movementEnabled = false;
 

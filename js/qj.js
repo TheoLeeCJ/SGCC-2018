@@ -202,6 +202,9 @@ var qj;
 				this[k] = properties[k];
 			}
 			// TODO: set default value of certain styles, eg center for verticalAlign
+
+			// 1807 Bugfix
+			qj.stages[currentStage].objects.push(this);
 		}
 		// .show() and .hide()
 		// Show or hide the qjObject element, by setting 'display: none'
@@ -327,6 +330,8 @@ var qj;
 		// Opposite of cleanup(); setup everything in this stage
 		// Used after changing to this stage through qj.stage
 		Stage.prototype.setup = function () {
+			currentStage = this.stage;
+
 			// Run this stage's setup function
 			if (!this.setup_run) {
 				this.setup_func.call(this);
@@ -350,8 +355,9 @@ var qj;
 	// Gets or changes the qj stage
 	define_setter(qj, 'stage', function (new_stage) {
 		// cleanup the old stage
-		if (qj.stages.hasOwnProperty(qj.stage_name))
+		if ((qj.stages.hasOwnProperty(qj.stage_name)) && (qj.stage_name !== "Game")) {
 			qj.stages[qj.stage_name].cleanup();
+		}
 		// new stage
 		qj.stage_name = new_stage;
 		qj.stages[qj.stage_name].setup();
