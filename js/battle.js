@@ -106,12 +106,14 @@ var attackTimer = 0, enemyInfo = null, attackProgress = 100, a, projectilesMovin
 					//InitBattle();
 					enemyHealth = 100;
 					qj.stage = "GrandpaOK";
+					mountain.pause();
 				}
 				else {
 					//delete qj.stages["Battle"];
 					//InitBattle();
 					enemyHealth = 100;
 					qj.stage = "GrandpaOK";
+					mountain.pause();
 				}
 			});
 		}
@@ -128,7 +130,7 @@ function InitBattle() {
 	projectileSpeed = [2.25, 2.25, 2.25];
 	attackTimer = 0, attackProgress = 100, a, projectilesMoving = [false, false, false], wasSpacePressed = 0, redirectSpacebar = "", health = 100, enemyHealth = 110, isMovingLanes = false, lane = 0;
 
-	qj.run("Battle", function() {
+	qj.run("Battle", function() { mountain.play();
 		enemyInfo = enemiesInfo[sessionStorage.getItem("enemyId")];
 
 		floor = qj({

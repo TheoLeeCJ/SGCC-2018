@@ -88,7 +88,7 @@ qj.run("Outside", function() {
 											setTimeout(function() {
 												sessionStorage.setItem("enemyId", "sugarboi");
 												sessionStorage.setItem("showTutorial", "false");
-												qj.stage = "Battle";
+												qj.stage = "Battle2";
 										}, 1500);
 									});
 								}, 3000);

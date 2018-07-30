@@ -29,6 +29,7 @@ qj.run("StartScreen", function() {
 	});
 
 	startScreenButtons[0].on("click", function() {
+		music1.play();
 		qj.stage = "Story";
 	});
 
@@ -41,6 +42,7 @@ qj.run("StartScreen", function() {
 	});
 
 	startScreenButtons[1].on("click", function() {
+		music1.play();
 		qj.stage = "Credits";
 	});
 });

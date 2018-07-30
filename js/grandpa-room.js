@@ -50,7 +50,7 @@ qj.run("GrandpaRoom", function() {
 						
 						tutorialTriangle.off();
 						tutorialTriangle.on("click", function() {
-							tutorialTriangle.off();
+							tutorialTriangle.off(); music1.pause();
 
 							whitestuff.style.animation = "fadeIn 3s infinite";
 							whitestuff.show();

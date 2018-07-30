@@ -9,6 +9,18 @@
 			buttonSound = new Audio('music/button.mp3');
 			teleportSound = new Audio('music/teleport.mp3');
 			switchSound = new Audio('music/switch.mp3');
+
+			music1 = new Audio("music/sci-fi.mp3");
+			music1.addEventListener('ended', function () {
+				this.currentTime = 0;
+				this.play();
+			}, false);
+
+			mountain = new Audio('music/mountain.mp3');
+			mountain.addEventListener('ended', function () {
+				this.currentTime = 0;
+				this.play();
+			}, false);
 		</script>
 
 		<link href="styling.css" rel="stylesheet" />
@@ -33,6 +45,7 @@
 		<script src="js/grandpa-ok.js"></script>
 		<script src="js/outside.js"></script>
 		<script src="js/battle.js"></script>
+		<script src="js/battle2.js"></script>
 		<script src="js/game.js"></script>
 
 		<script>
